@@ -12,6 +12,7 @@ class Server : public QTcpServer
 
 public:
     Server(qint16 nPort);
+    ~Server();
 
 
     bool isServerRunning() const;

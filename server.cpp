@@ -14,6 +14,9 @@ void Server::incomingConnection(qintptr sokerDeskription){
     qDebug() <<"Поднлючен пользователь:" <<sokerDeskription;
 }
 
+Server::~Server(){
+    delete socket;
+}
 
 bool Server::isServerRunning() const{
     return this->isListening();

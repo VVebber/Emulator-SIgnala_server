@@ -61,3 +61,17 @@
 166	959	1724772298573922993	CMakeFiles/Server.dir/Server_autogen/mocs_compilation.cpp.o	449d8bd4bbb6c955
 166	1025	1724772298574198693	CMakeFiles/Server.dir/mainwindow.cpp.o	d96f9f2935327b41
 1025	1121	1724772299432780117	Server.app/Contents/MacOS/Server	7ba979709f4c5be3
+38	223	1724839938945128000	Server_autogen/timestamp	cca90bfb29b7fb53
+38	223	1724839938945128000	Server_autogen/mocs_compilation.cpp	cca90bfb29b7fb53
+38	223	1724839938945128000	/Users/malysevdanil/Documents/Projects/P2/Server/build/Qt_6_7_2_for_macOS-Debug/Server_autogen/timestamp	cca90bfb29b7fb53
+38	223	1724839938945128000	/Users/malysevdanil/Documents/Projects/P2/Server/build/Qt_6_7_2_for_macOS-Debug/Server_autogen/mocs_compilation.cpp	cca90bfb29b7fb53
+223	1605	1724839938953128150	CMakeFiles/Server.dir/main.cpp.o	7d46b2c2aa2e5d80
+223	1608	1724839938952932239	CMakeFiles/Server.dir/Server_autogen/mocs_compilation.cpp.o	449d8bd4bbb6c955
+223	1634	1724839938953237064	CMakeFiles/Server.dir/mainwindow.cpp.o	d96f9f2935327b41
+11	39	1724839956353559053	Server_autogen/timestamp	cca90bfb29b7fb53
+11	39	1724839956353559053	Server_autogen/mocs_compilation.cpp	cca90bfb29b7fb53
+11	39	1724839956353559053	/Users/malysevdanil/Documents/Projects/P2/Server/build/Qt_6_7_2_for_macOS-Debug/Server_autogen/timestamp	cca90bfb29b7fb53
+11	39	1724839956353559053	/Users/malysevdanil/Documents/Projects/P2/Server/build/Qt_6_7_2_for_macOS-Debug/Server_autogen/mocs_compilation.cpp	cca90bfb29b7fb53
+40	1016	1724839956382398879	CMakeFiles/Server.dir/server.cpp.o	8e2581396cc822da
+40	1075	1724839956382212675	CMakeFiles/Server.dir/mainwindow.cpp.o	d96f9f2935327b41
+1075	1333	1724839957417283172	Server.app/Contents/MacOS/Server	7ba979709f4c5be3
