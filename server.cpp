@@ -1,8 +1,9 @@
 #include "server.h"
 
-Server::Server(qint16 nPort) {
+Server::Server(qint16 nPort)
+{
     if (!this->listen(QHostAddress::Any, nPort))
-        QMessageBox::critical(0, "Ошибка сервера", "Невозможно запустить сервер:" + this->errorString());
+        qDebug() <<"Невозможно запустить сервер.";
     else qDebug() << "Сервер запущен, порт"<< nPort;
 }
 
@@ -12,10 +13,16 @@ void Server::incomingConnection(qintptr sokerDeskription){
     connect(socket, &QTcpSocket::readyRead, this, &Server::ReadToClient);
     connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
     qDebug() <<"Поднлючен пользователь:" <<sokerDeskription;
+
+    Wave = new WaveSimulator(socket);
+    connect(socket, &QTcpSocket::disconnected, Wave, &WaveSimulator::terminate);
+
 }
 
 Server::~Server(){
+    if(socket)
     delete socket;
+    delete Wave;
 }
 
 bool Server::isServerRunning() const{
@@ -32,45 +39,10 @@ void Server::ReadToClient(){
         in >> str;
 
         qDebug() <<"Получен запрос: "<< str;
-
-        SendToClient(str);
+        if(Wave->isRunning())
+            Wave->terminate();
+        Wave->settypeSignal(str);
+        Wave->start();
     } else
         qDebug() <<"Ошибка запроса.";
-}
-
-void Server::SendToClient(QString &TypeSignal) {
-    qDebug() <<"Отправка запроса: "<< TypeSignal;
-    for (int x = -100; x < 100; x++) {
-        qreal y = 0;
-        if (TypeSignal == "sin") {
-            y = 50 * std::sin(x * M_PI / 50);
-        } else if (TypeSignal == "cos") {
-            y = 50 * std::cos(x * M_PI / 50);
-        } else if (TypeSignal == "tan") {
-            y = 50 * std::tan(x * M_PI / 50);
-        } else if (TypeSignal == "atan") {
-            y = 50 * std::atan(x * M_PI / 50);
-        } else if (TypeSignal == "acos") {
-            y = 50 * std::acos(x / 100.0);
-        } else if (TypeSignal == "asin") {
-            y = 50 * std::asin(x / 100.0);
-        }
-
-        if (std::abs(y) > 500) {
-            y = std::copysign(500.0, y);
-        }
-
-        QPoint Point(x,y);
-
-        QByteArray Data;
-        Data.clear();
-        QDataStream out(&Data, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_6_2);
-        out << Point;
-        socket->write(Data);
-        socket->flush();
-
-
-        QThread::msleep(100);
-    }
 }

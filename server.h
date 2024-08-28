@@ -1,10 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
-#include <QMessageBox>
-#include <QThread>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QVector>
+
+#include "wavesimulator.h"
 
 class Server : public QTcpServer
 {
@@ -21,15 +18,15 @@ public slots:
     void incomingConnection(qintptr sokerDeskription) override;
 
     void ReadToClient();
+
 private:
     /*TCP/IP*/
     QTcpSocket* socket;
     QByteArray Data;
     qint16 nPort;
+    /*=====*/
 
-    void SendToClient(QString &TypeSignal);
-
-
+    WaveSimulator* Wave;
 };
 
 #endif // SERVER_H

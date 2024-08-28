@@ -92,6 +92,7 @@
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/syslimits.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/wait.h \
   /Users/malysevdanil/Documents/Projects/P2/Server/server.h \
+  /Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.h \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QThread \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QVector \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \

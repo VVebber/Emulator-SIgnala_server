@@ -91,7 +91,6 @@
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/stdio.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/syslimits.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/wait.h \
-  /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QDebug \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QThread \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QVector \
   /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \

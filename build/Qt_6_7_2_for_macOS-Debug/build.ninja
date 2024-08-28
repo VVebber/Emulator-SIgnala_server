@@ -81,6 +81,14 @@ build CMakeFiles/Server.dir/server.cpp.o: CXX_COMPILER__Server_unscanned_Debug /
   OBJECT_DIR = CMakeFiles/Server.dir
   OBJECT_FILE_DIR = CMakeFiles/Server.dir
 
+build CMakeFiles/Server.dir/wavesimulator.cpp.o: CXX_COMPILER__Server_unscanned_Debug /Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.cpp || cmake_object_order_depends_target_Server
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles/Server.dir/wavesimulator.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.2 -fcolor-diagnostics
+  INCLUDES = -I/Users/malysevdanil/Documents/Projects/P2/Server/build/Qt_6_7_2_for_macOS-Debug/Server_autogen/include -isystem /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Headers -iframework /Users/malysevdanil/Qt/6.7.2/macos/lib -isystem /Users/malysevdanil/Qt/6.7.2/macos/mkspecs/macx-clang -isystem /Users/malysevdanil/Qt/6.7.2/macos/include -isystem /Users/malysevdanil/Qt/6.7.2/macos/lib/QtWidgets.framework/Headers -isystem /Users/malysevdanil/Qt/6.7.2/macos/lib/QtGui.framework/Headers -isystem /Users/malysevdanil/Qt/6.7.2/macos/lib/QtNetwork.framework/Headers
+  OBJECT_DIR = CMakeFiles/Server.dir
+  OBJECT_FILE_DIR = CMakeFiles/Server.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Server
@@ -89,7 +97,7 @@ build CMakeFiles/Server.dir/server.cpp.o: CXX_COMPILER__Server_unscanned_Debug /
 #############################################
 # Link the executable Server.app/Contents/MacOS/Server
 
-build Server.app/Contents/MacOS/Server: CXX_EXECUTABLE_LINKER__Server_Debug CMakeFiles/Server.dir/Server_autogen/mocs_compilation.cpp.o CMakeFiles/Server.dir/main.cpp.o CMakeFiles/Server.dir/mainwindow.cpp.o CMakeFiles/Server.dir/server.cpp.o | /Users/malysevdanil/Qt/6.7.2/macos/lib/QtWidgets.framework/Versions/A/QtWidgets /Users/malysevdanil/Qt/6.7.2/macos/lib/QtNetwork.framework/Versions/A/QtNetwork /Users/malysevdanil/Qt/6.7.2/macos/lib/QtGui.framework/Versions/A/QtGui /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/QtCore || Server_autogen Server_autogen_timestamp_deps
+build Server.app/Contents/MacOS/Server: CXX_EXECUTABLE_LINKER__Server_Debug CMakeFiles/Server.dir/Server_autogen/mocs_compilation.cpp.o CMakeFiles/Server.dir/main.cpp.o CMakeFiles/Server.dir/mainwindow.cpp.o CMakeFiles/Server.dir/server.cpp.o CMakeFiles/Server.dir/wavesimulator.cpp.o | /Users/malysevdanil/Qt/6.7.2/macos/lib/QtWidgets.framework/Versions/A/QtWidgets /Users/malysevdanil/Qt/6.7.2/macos/lib/QtNetwork.framework/Versions/A/QtNetwork /Users/malysevdanil/Qt/6.7.2/macos/lib/QtGui.framework/Versions/A/QtGui /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/QtCore || Server_autogen Server_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.2
   LINK_LIBRARIES = -Wl,-rpath,/Users/malysevdanil/Qt/6.7.2/macos/lib  /Users/malysevdanil/Qt/6.7.2/macos/lib/QtWidgets.framework/Versions/A/QtWidgets  /Users/malysevdanil/Qt/6.7.2/macos/lib/QtNetwork.framework/Versions/A/QtNetwork  /Users/malysevdanil/Qt/6.7.2/macos/lib/QtGui.framework/Versions/A/QtGui  -framework OpenGL  -framework AGL  -framework AppKit  -framework ImageIO  -framework Metal  /Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/QtCore  -framework IOKit  -framework DiskArbitration
   LINK_PATH = -F/Users/malysevdanil/Qt/6.7.2/macos/lib

@@ -100,6 +100,8 @@ Server_autogen/timestamp: \
 	/Users/malysevdanil/Documents/Projects/P2/Server/mainwindow.h \
 	/Users/malysevdanil/Documents/Projects/P2/Server/server.cpp \
 	/Users/malysevdanil/Documents/Projects/P2/Server/server.h \
+	/Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.cpp \
+	/Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.h \
 	/Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QThread \
 	/Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/QVector \
 	/Users/malysevdanil/Qt/6.7.2/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \

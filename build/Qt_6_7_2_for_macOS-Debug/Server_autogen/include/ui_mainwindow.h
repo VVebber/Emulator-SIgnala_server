@@ -13,13 +13,13 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -28,11 +28,11 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
-    QHBoxLayout *horizontalLayout;
-    QLabel *labelPort;
+    QGridLayout *gridLayout;
     QSpinBox *spinPort;
+    QLabel *labelPort;
     QPushButton *StartServer;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -41,7 +41,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(324, 125);
+        MainWindow->resize(165, 161);
         MainWindow->setStyleSheet(QString::fromUtf8("#StartServer[state = \"0\"]{\n"
 "	color: rgb(255, 98, 101)\n"
 "}\n"
@@ -50,38 +50,38 @@ public:
 "}"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        gridLayout = new QGridLayout(centralwidget);
-        gridLayout->setObjectName("gridLayout");
+        verticalLayout = new QVBoxLayout(centralwidget);
+        verticalLayout->setObjectName("verticalLayout");
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName("groupBox");
-        horizontalLayout = new QHBoxLayout(groupBox);
-        horizontalLayout->setObjectName("horizontalLayout");
-        labelPort = new QLabel(groupBox);
-        labelPort->setObjectName("labelPort");
-
-        horizontalLayout->addWidget(labelPort);
-
+        gridLayout = new QGridLayout(groupBox);
+        gridLayout->setObjectName("gridLayout");
         spinPort = new QSpinBox(groupBox);
         spinPort->setObjectName("spinPort");
         spinPort->setMinimum(1024);
         spinPort->setMaximum(65000);
 
-        horizontalLayout->addWidget(spinPort);
+        gridLayout->addWidget(spinPort, 0, 2, 1, 1);
+
+        labelPort = new QLabel(groupBox);
+        labelPort->setObjectName("labelPort");
+
+        gridLayout->addWidget(labelPort, 0, 0, 1, 1);
 
         StartServer = new QPushButton(groupBox);
         StartServer->setObjectName("StartServer");
         StartServer->setAutoDefault(false);
         StartServer->setFlat(false);
 
-        horizontalLayout->addWidget(StartServer);
+        gridLayout->addWidget(StartServer, 2, 2, 1, 1);
 
 
-        gridLayout->addWidget(groupBox, 0, 0, 1, 1);
+        verticalLayout->addWidget(groupBox);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 324, 24));
+        menubar->setGeometry(QRect(0, 0, 165, 24));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");

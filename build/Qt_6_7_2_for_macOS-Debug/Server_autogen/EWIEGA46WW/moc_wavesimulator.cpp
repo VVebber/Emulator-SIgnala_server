@@ -59,7 +59,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSWaveSimulatorENDCLASS[] = {
 };
 
 Q_CONSTINIT const QMetaObject WaveSimulator::staticMetaObject = { {
-    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    QMetaObject::SuperData::link<QThread::staticMetaObject>(),
     qt_meta_stringdata_CLASSWaveSimulatorENDCLASS.offsetsAndSizes,
     qt_meta_data_CLASSWaveSimulatorENDCLASS,
     qt_static_metacall,
@@ -89,12 +89,12 @@ void *WaveSimulator::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_CLASSWaveSimulatorENDCLASS.stringdata0))
         return static_cast<void*>(this);
-    return QObject::qt_metacast(_clname);
+    return QThread::qt_metacast(_clname);
 }
 
 int WaveSimulator::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QObject::qt_metacall(_c, _id, _a);
+    _id = QThread::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

@@ -382,6 +382,12 @@
 			"MU",
 			"EWIEGA46WW/moc_server.cpp",
 			null
+		],
+		[
+			"/Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.h",
+			"MU",
+			"EWIEGA46WW/moc_wavesimulator.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -455,6 +461,11 @@
 		],
 		[
 			"/Users/malysevdanil/Documents/Projects/P2/Server/server.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Users/malysevdanil/Documents/Projects/P2/Server/wavesimulator.cpp",
 			"MU",
 			null
 		]
