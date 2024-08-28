@@ -30,7 +30,7 @@ void MainWindow::on_StartServer_clicked()
             // connect(server, &Server::DrawOutServer, this, &MainWindow::DrawInBrowser);
         }
         else {
-            q   Debug()<<"Произошли проблемы с подключением к серверу";
+            qDebug()<<"Произошли проблемы с подключением к серверу";
             state = "0";
             delete server;
             server = nullptr;
