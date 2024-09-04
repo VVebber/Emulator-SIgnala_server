@@ -39,7 +39,7 @@ void WaveSimulator::Waves() {
 
         QByteArray Data;
         QDataStream out(&Data, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_6_2);
+        out.setVersion(QDataStream::Qt_5_15);
         out << Point;
         socket->write(Data);
         socket->flush();

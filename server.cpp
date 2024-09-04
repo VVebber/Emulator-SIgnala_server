@@ -32,7 +32,7 @@ bool Server::isServerRunning() const{
 void Server::ReadToClient(){
     socket = (QTcpSocket*)sender();
     QDataStream in(socket);
-    in.setVersion(QDataStream::Qt_6_2);
+    in.setVersion(QDataStream::Qt_5_15);
 
     if(in.status() == QDataStream::Ok){
         QString str;
