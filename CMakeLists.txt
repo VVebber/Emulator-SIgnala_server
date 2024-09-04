@@ -13,14 +13,14 @@ find_package(QT NAMES  Qt5 REQUIRED COMPONENTS Widgets Network)
 find_package(Qt5 REQUIRED COMPONENTS Widgets Network)
 
 set(PROJECT_SOURCES
-    main.cpp
-    mainwindow.cpp
-    server.h
-    server.cpp
-    wavesimulator.cpp
-    wavesimulator.h
-    mainwindow.h
-    mainwindow.ui
+    src/main.cpp
+    src/mainwindow.cpp
+    src/server.h
+    src/server.cpp
+    src/wavesimulator.cpp
+    src/wavesimulator.h
+    src/mainwindow.h
+    src/mainwindow.ui
     )
 
 add_executable(Server
