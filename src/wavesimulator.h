@@ -10,22 +10,22 @@
 
 class WaveSimulator : public QThread {
     Q_OBJECT
-private:/*PRIVATE*/
-    QTcpSocket* socket;
-    QString typeSignal;
+
 
 protected:/*PROTECTED*/
-    void run() override;
+    void run();
 
 public:/*PUBLIC*/
-    explicit WaveSimulator(QTcpSocket* socket);
+    WaveSimulator(QMultiMap<QString, QTcpSocket*> clients);
 
+public slots:
+    void  creatingWave();
 
-    void Waves();
-    /*set*/
-    void settypeSignal(QString typeSignal);
-    /*get*/
+private:/*PRIVATE*/
 
+    QMultiMap<QString, QTcpSocket*> m_clients;
+
+    int m_countPoint;
 };
 
 #endif

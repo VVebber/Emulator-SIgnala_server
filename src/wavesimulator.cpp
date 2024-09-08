@@ -1,60 +1,63 @@
 #include "wavesimulator.h"
 
-static const double M_PI = 3.14;
-
-WaveSimulator::WaveSimulator(QTcpSocket* socket) :
-    socket(socket) {}
-
-void WaveSimulator::run(){
-    Waves();
+WaveSimulator::WaveSimulator(QMultiMap<QString, QTcpSocket*> clients) {
+    m_clients = clients;
+    m_countPoint = -100;
 }
 
-void WaveSimulator::Waves() {
-    for (int x = -100; ; ++x) {
-        if (x >= 100)
-            x = -100;
+void WaveSimulator::run()
+{
+    creatingWave();
+}
 
-        if(!socket->isValid()){
-            break;
+void WaveSimulator:: creatingWave()
+{
+    if(m_clients.size() != 0)
+    {
+        if(m_countPoint >= 100){
+            m_countPoint = -100;
         }
+        QPoint Point(m_countPoint, 0);
+        for(auto i = m_clients.begin(); i != m_clients.end(); i++)
+        {
+            if(!i.value()->isOpen())
+            {
+                continue;
+            }
 
-        qreal y = 0;
-        if (typeSignal == "sin") {
-            y = 50 * std::sin(x * M_PI / 50);
-        } else if (typeSignal == "cos") {
-            y = 50 * std::cos(x * M_PI / 50);
-        } else if (typeSignal == "tan") {
-            y = 50 * std::tan(x * M_PI / 50);
-        } else if (typeSignal == "atan") {
-            y = 50 * std::atan(x * M_PI / 50);
-        } else if (typeSignal == "acos") {
-            y = 30 * std::acos(x / 150.0);
-        } else if (typeSignal == "asin") {
-            y = 40 * std::asin(x / 100.0);
-        }
+            if (i.key() == "sin")
+            {
+                Point.setY(50 * std::sin(m_countPoint * M_PI / 50));
+            }
+            else if (i.key() == "cos")
+            {
+                Point.setY(50 * std::cos(m_countPoint * M_PI / 50));
+            }
+            else if (i.key() == "tan")
+            {
+                Point.setY(50 * std::tan(m_countPoint * M_PI / 50));
+            }
+            else if (i.key() == "atan")
+            {
+                Point.setY(50 * std::atan(m_countPoint * M_PI / 50));
+            }
+            else if (i.key() == "acos")
+            {
+                Point.setY(30 * std::acos(m_countPoint / 150.0));
+            }
+            else if (i.key() == "asin")
+            {
+                Point.setY(40 * std::asin(m_countPoint / 100.0));
+            }
 
-        if (std::abs(y) > 500) {
-            y = std::copysign(500.0, y);
-        }
+            QByteArray Data;
+            QDataStream out(&Data, QIODevice::WriteOnly);
+            out.setVersion(QDataStream::Qt_5_15);
+            out << Point;
+            i.value()->write(Data);
+            i.value()->flush();
 
-        QPoint Point(x, y);
-
-        QByteArray Data;
-        QDataStream out(&Data, QIODevice::WriteOnly);
-        out.setVersion(QDataStream::Qt_5_15);
-        out << Point;
-        socket->write(Data);
-        socket->flush();
-
-        QThread::msleep(100);
-
-        if (!socket->isOpen()) {
-            break;
+            QThread::msleep(100);
         }
     }
 }
-
-void WaveSimulator::settypeSignal(QString typeSignal){
-    this->typeSignal = typeSignal;
-}
-

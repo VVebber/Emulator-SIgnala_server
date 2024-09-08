@@ -19,12 +19,14 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-private:
-    Ui::MainWindow *ui;
 
-    Server* pServer;
+private:
+    Ui::MainWindow *m_ui;
+
+    Server* m_server;
+
 private slots:
-    void on_StartServer_clicked();
+    void onStartServerClicked();
 
 };
 #endif // MAINWINDOW_H

@@ -3,41 +3,46 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    ,pServer(nullptr)
+    , m_ui(new Ui::MainWindow)
+    , m_server(nullptr)
 {
 
-    ui->setupUi(this);
+    m_ui->setupUi(this);
+
+    connect(m_ui->StartServer, &QPushButton::clicked, this, &MainWindow::onStartServerClicked);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
-    if (pServer) {
-        delete pServer;
+    delete m_ui;
+    if (m_server)
+    {
+        delete m_server;
     }
 }
 
-void MainWindow::on_StartServer_clicked()
+void MainWindow::onStartServerClicked()
 {
-    if (!pServer) {
+    if (!m_server)
+    {
         QString state = "";
-        pServer = new Server(ui->spinPort->value());
-        if(pServer->isServerRunning()){
+        m_server = new Server(m_ui->spinPort->value());
+        if(m_server->isServerRunning())
+        {
             state = "1";
             qDebug()<<"Сервер поднлючен";
-
-            // connect(server, &Server::DrawOutServer, this, &MainWindow::DrawInBrowser);
         }
-        else {
+        else
+        {
             qDebug()<<"Произошли проблемы с подключением к серверу";
             state = "0";
-            delete pServer;
-            pServer = nullptr;
+            delete m_server;
+            m_server = nullptr;
         }
-        ui->StartServer->setProperty("state", state);
-        style()->polish(ui->StartServer);
-        ui->StartServer->update();
+        m_ui->StartServer->setProperty("state", state);
+        style()->polish(m_ui->StartServer);
+        m_ui->StartServer->update();
     }
 }
+
 
