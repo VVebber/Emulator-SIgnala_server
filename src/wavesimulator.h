@@ -8,24 +8,41 @@
 #include <QVector>
 #include <cmath>
 
-class WaveSimulator : public QThread {
+class WaveSimulator : public QObject {
     Q_OBJECT
 
 
 protected:/*PROTECTED*/
-    void run();
 
 public:/*PUBLIC*/
-    WaveSimulator(QMultiMap<QString, QTcpSocket*> clients);
+    WaveSimulator();
 
+    void connectClient();
+
+    void setsokerDeskription(qintptr sokerDeskription);
 public slots:
-    void  creatingWave();
+    void readToClient();
+
+    void start();
+
+    void timerEvent(QTimerEvent *event) override;
+
+
+    void disconectClient();
 
 private:/*PRIVATE*/
 
-    QMultiMap<QString, QTcpSocket*> m_clients;
+
+    QTcpSocket* m_socket;
+
+    qintptr m_sokerDeskription;
+
+    QString m_typeWave;
 
     int m_countPoint;
+
+private:
+    void  sendToClient();
 };
 
 #endif

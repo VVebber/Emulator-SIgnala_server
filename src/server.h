@@ -21,27 +21,16 @@ public:
 public slots:
     void incomingConnection(qintptr sokerDeskription) override;
 
-    void readToClient();
-
-    void sendToClient();
-
-    void disconectClient();
-
-    void timerEvent(QTimerEvent*event) override;
 signals:
     void startWaves();
 
 private:
     /*TCP/IP*/
-
-    QByteArray m_data;
-
     qint16 m_port;
 
-    int m_timerId;
-    int m_countPoint;
+    QList<WaveSimulator*> m_clients;
 
-    QMultiMap<QTcpSocket*,QString> m_clients;
+    QThread m_thread;
 };
 
 #endif // SERVER_H
