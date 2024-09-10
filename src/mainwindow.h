@@ -22,7 +22,6 @@ public:
 
 private:
     Ui::MainWindow *m_ui;
-
     Server* m_server;
 
 private slots:

@@ -13,8 +13,6 @@ class Server : public QTcpServer
 public:
     Server(qint16 nPort);
     ~Server();
-
-
     bool isServerRunning() const;
 
 public slots:
@@ -26,9 +24,7 @@ signals:
 private:
     /*TCP/IP*/
     qint16 m_port;
-
     Client* m_wave;
-
     QThread m_thread;
 };
 

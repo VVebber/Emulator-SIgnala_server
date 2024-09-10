@@ -19,22 +19,16 @@ public:/*PUBLIC*/
     ~Client();
 
     void connectClient();
-
     void setsokerDeskription(qintptr sokerDeskription);
+
 public slots:
     void readToClient();
-
     void start();
-
     void timerEvent(QTimerEvent *event) override;
-
-
     void disconectClient();
+
 private:/*PRIVATE*/
-
-
     QMap<QTcpSocket*, QString> m_socket;
-
     qintptr m_socketDeskription;
 
     int m_countPoint;
