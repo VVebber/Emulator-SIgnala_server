@@ -23,7 +23,7 @@ signals:
 
 private:
     qint16 m_port;
-    Client* m_wave;
+    Client* m_Clients;
     QThread m_thread;
 };
 

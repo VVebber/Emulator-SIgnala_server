@@ -23,7 +23,6 @@ void Client::connectClient()
 
     qDebug() <<"Connect client";
     qDebug() <<"count"<< m_socket.size();
-
 }
 
 void Client::setsokerDeskription(qintptr socketDeskription)
@@ -72,7 +71,6 @@ void Client::disconectClient()
             i = m_socket.erase(i);
             break;
         }
-
     }
 }
 
@@ -92,7 +90,6 @@ void Client::sendToClient()
     if(m_countPoint >= 100){
         m_countPoint = -100;
     }
-
     QPoint Point(m_countPoint, 0);
     if(m_socket.size() == 0)
     {
@@ -102,7 +99,6 @@ void Client::sendToClient()
     {
         if(i.key()->isOpen())
         {
-
             if (i.value() == "sin")
             {
                 Point.setY(50 * std::sin(m_countPoint * M_PI / 50));
@@ -135,10 +131,7 @@ void Client::sendToClient()
             out << Point;
             i.key()->write(Data);
             i.key()->flush();
-
-
             m_countPoint++;
-
             QThread::msleep(100);
         }
     }
