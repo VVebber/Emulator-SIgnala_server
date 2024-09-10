@@ -3,29 +3,23 @@
 Client::Client()
 {
     m_countPoint = -100;
-    m_idTimeEveent = 0;
+    typeSignal = "cos";
+    m_socket = nullptr;
+    qRegisterMetaType<qintptr>("S");
 }
 
-Client::~Client()
-{
-    killTimer(m_idTimeEveent);
-}
+Client::~Client() {}
 
 void Client::connectClient()
 {
-    QTcpSocket* socket = new QTcpSocket;
-    socket->setSocketDescriptor(m_socketDeskription);
+    m_socket = new QTcpSocket;
+    m_socket->setSocketDescriptor(m_socketDeskription);
 
-    connect(socket, &QTcpSocket::readyRead, this, &Client::readToClient);
-    connect(socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
-
-    m_socket.insert(socket, "cos");
-
-    qDebug() <<"Connect client";
-    qDebug() <<"count"<< m_socket.size();
+    connect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
+    connect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 }
 
-void Client::setsokerDeskription(qintptr socketDeskription)
+void Client::setsocketDeskription(qintptr socketDeskription)
 {
     m_socketDeskription = socketDeskription;
 }
@@ -41,15 +35,7 @@ void Client::readToClient()
         QString str;
         in >> str;
 
-        for(auto i= m_socket.begin(); i!= m_socket.end(); ++i)
-        {
-            if(i.key() == socket)
-            {
-                i.value() = str;
-                break;
-            }
-        }
-
+        typeSignal = str;
         qDebug() <<"Receive request: "<< str;
     }
     else
@@ -60,22 +46,15 @@ void Client::readToClient()
 
 void Client::disconectClient()
 {
-    QTcpSocket* soket = qobject_cast<QTcpSocket*>(sender());
-
-    for(auto i= m_socket.begin(); i!= m_socket.end(); ++i)
-    {
-        if(i.key() == soket)
-        {
-            i.key()->close();
-            i.key()->deleteLater();
-            i = m_socket.erase(i);
-            break;
-        }
-    }
+    m_socket->close();
+    m_socket->deleteLater();
+    m_socket = nullptr;
+    //!!!!
 }
 
 void Client::start()
 {
+    qDebug()<<"ss";
     startTimer(200);
 }
 
@@ -85,54 +64,52 @@ void Client::timerEvent(QTimerEvent* event)
 }
 
 void Client::sendToClient()
-{
-
+{    
     if(m_countPoint >= 100){
         m_countPoint = -100;
     }
     QPoint Point(m_countPoint, 0);
-    if(m_socket.size() == 0)
-    {
+
+    if(m_socket == nullptr){
         return;
     }
-    for(auto i= m_socket.begin(); i!= m_socket.end(); ++i)
-    {
-        if(i.key()->isOpen())
-        {
-            if (i.value() == "sin")
-            {
-                Point.setY(50 * std::sin(m_countPoint * M_PI / 50));
-            }
-            else if (i.value() == "cos")
-            {
-                Point.setY(50 * std::cos(m_countPoint * M_PI / 50));
-            }
-            else if (i.value() == "tan")
-            {
-                Point.setY(50 * std::tan(m_countPoint * M_PI / 50));
-            }
-            else if (i.value() == "atan")
-            {
-                Point.setY(50 * std::atan(m_countPoint * M_PI / 50));
-            }
-            else if (i.value() == "acos")
-            {
-                Point.setY(30 * std::acos(m_countPoint / 150.0));
-            }
-            else if (i.value() == "asin")
-            {
-                Point.setY(40 * std::asin(m_countPoint / 100.0));
-            }
 
-            QByteArray Data;
-            Data.clear();
-            QDataStream out(&Data, QIODevice::WriteOnly);
-            out.setVersion(QDataStream::Qt_5_15);
-            out << Point;
-            i.key()->write(Data);
-            i.key()->flush();
-            m_countPoint++;
-            QThread::msleep(100);
+    if(m_socket->isOpen())
+    {
+        if (typeSignal == "sin")
+        {
+            Point.setY(50 * std::sin(m_countPoint * M_PI / 50));
         }
+        else if (typeSignal == "cos")
+        {
+            Point.setY(50 * std::cos(m_countPoint * M_PI / 50));
+        }
+        else if (typeSignal == "tan")
+        {
+            Point.setY(50 * std::tan(m_countPoint * M_PI / 50));
+        }
+        else if (typeSignal == "atan")
+        {
+            Point.setY(50 * std::atan(m_countPoint * M_PI / 50));
+        }
+        else if (typeSignal == "acos")
+        {
+            Point.setY(30 * std::acos(m_countPoint / 150.0));
+        }
+        else if (typeSignal == "asin")
+        {
+            Point.setY(40 * std::asin(m_countPoint / 100.0));
+        }
+
+        QByteArray Data;
+        Data.clear();
+        QDataStream out(&Data, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_5_15);
+        out << Point;
+        m_socket->write(Data);
+        m_socket->flush();
+        m_countPoint++;
+        QThread::msleep(100);
     }
 }
+
