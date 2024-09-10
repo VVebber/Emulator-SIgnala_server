@@ -27,26 +27,27 @@ void Server::incomingConnection(qintptr socketDeskription)
         m_thread.quit();
     }
 
-    Client* s = new Client;
-    s->moveToThread(&m_thread);
+    Client* newClient = new Client;
+    newClient->moveToThread(&m_thread);
 
-    connect(&m_thread, &QThread::started, s, &Client::start);
-    connect(this, &Server::connectClient, s, &Client::connectClient);
-    connect(s,&Client::dicsonect, s, &Client::deleteLater);
+    connect(&m_thread, &QThread::started, newClient, &Client::start);
+    connect(this, &Server::connectClient, newClient, &Client::connectClient);
+    connect(s,&Client::dicsonect, newClient, &Client::deleteLater);
     // connect(&m_thread, &QThread::finished, s, &Client::deleteLater);
     // connect(&m_thread, &QThread::finished, &m_thread, &QThread::deleteLater);
 
-    s->setsocketDeskription(socketDeskription);
+    newClient->setsocketDeskription(socketDeskription);
     emit connectClient();
 
-    m_Clients.push_back(s);
+    m_Clients.push_back(newClient);
 
     m_thread.start();
 
 }
 
 Server::~Server(){
-    m_thread.exit();
+    m_thread .quit();
+    m_thread .wait();
     m_thread.deleteLater();
     //delete m_Clients;
 }
