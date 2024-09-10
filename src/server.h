@@ -22,7 +22,6 @@ signals:
     void connectClient();
 
 private:
-    /*TCP/IP*/
     qint16 m_port;
     Client* m_wave;
     QThread m_thread;

@@ -11,10 +11,7 @@
 class Client : public QObject {
     Q_OBJECT
 
-
-protected:/*PROTECTED*/
-
-public:/*PUBLIC*/
+public:
     Client();
     ~Client();
 
@@ -27,7 +24,7 @@ public slots:
     void timerEvent(QTimerEvent *event) override;
     void disconectClient();
 
-private:/*PRIVATE*/
+private:
     QMap<QTcpSocket*, QString> m_socket;
     qintptr m_socketDeskription;
 
