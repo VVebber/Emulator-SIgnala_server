@@ -9,34 +9,28 @@ Server::Server(qint16 nPort)
     {
         qDebug() << "Сервер запущен, порт"<< nPort;
     }
+    m_wave = new WaveSimulator;
+    m_wave->moveToThread(&m_thread);
 
-   // m_thread = new QThread;
+    connect(&m_thread, &QThread::started, m_wave, &WaveSimulator::start);
+    connect(this, &Server::connectClient, m_wave, &WaveSimulator::connectClient);
+    connect(&m_thread, &QThread::finished, m_wave, &QThread::deleteLater);
+    connect(&m_thread, &QThread::finished, &m_thread, &WaveSimulator::deleteLater);
 
+
+    m_thread.start();
 }
 
 
 
 void Server::incomingConnection(qintptr sokerDeskription)
 {
-    //WaveSimulator *client = new WaveSimulator;
-    //client->connectClient(socketDescriptor());
-    //m_clients.push_back(client);
-
-    WaveSimulator* wave = new WaveSimulator;
-    wave->setsokerDeskription(sokerDeskription);
-
-     wave->moveToThread(&m_thread);
-
-    connect(&m_thread, &QThread::started, wave, &WaveSimulator::start);
-  //  connect(wave, &WaveSimulator::finished, wave, &WaveSimulator::deleteLater);
-    connect(&m_thread, &QThread::finished, &m_thread, &QThread::deleteLater);
-    connect(&m_thread, &QThread::finished, wave, &WaveSimulator::deleteLater);
-
-    m_thread.start();
+    m_wave->setsokerDeskription(sokerDeskription);
+    emit connectClient();
 }
 
 Server::~Server(){
-   // killTimer(m_timerId);
+
 }
 
 bool Server::isServerRunning() const

@@ -1,11 +1,10 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "wavesimulator.h"
+#include "client.h"
 #include <QTimerEvent>
 #include <QMultiMap>
 
-#include <vector>
 
 class Server : public QTcpServer
 {
@@ -22,13 +21,13 @@ public slots:
     void incomingConnection(qintptr sokerDeskription) override;
 
 signals:
-    void startWaves();
+    void connectClient();
 
 private:
     /*TCP/IP*/
     qint16 m_port;
 
-    QList<WaveSimulator*> m_clients;
+    WaveSimulator* m_wave;
 
     QThread m_thread;
 };

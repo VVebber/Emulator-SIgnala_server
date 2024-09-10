@@ -30,11 +30,11 @@ void MainWindow::onStartServerClicked()
         if(m_server->isServerRunning())
         {
             state = "1";
-            qDebug()<<"Сервер поднлючен";
+            qDebug()<<"Server is connected";
         }
         else
         {
-            qDebug()<<"Произошли проблемы с подключением к серверу";
+            qDebug()<<"There were problems connecting to the server";
             state = "0";
             delete m_server;
             m_server = nullptr;

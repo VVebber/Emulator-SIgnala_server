@@ -1,5 +1,5 @@
-#ifndef WAVESIMULATOR_H
-#define WAVESIMULATOR_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <QMessageBox>
 #include <QThread>
@@ -16,6 +16,7 @@ protected:/*PROTECTED*/
 
 public:/*PUBLIC*/
     WaveSimulator();
+    ~WaveSimulator();
 
     void connectClient();
 
@@ -29,17 +30,15 @@ public slots:
 
 
     void disconectClient();
-
 private:/*PRIVATE*/
 
 
-    QTcpSocket* m_socket;
+    QMap<QTcpSocket*, QString> m_socket;
 
     qintptr m_sokerDeskription;
 
-    QString m_typeWave;
-
     int m_countPoint;
+    int m_idTimeEveent;
 
 private:
     void  sendToClient();

@@ -17,8 +17,8 @@ set(PROJECT_SOURCES
     src/mainwindow.cpp
     src/server.h
     src/server.cpp
-    src/wavesimulator.cpp
-    src/wavesimulator.h
+    src/client.cpp
+    src/client.h
     src/mainwindow.h
     src/mainwindow.ui
     )
