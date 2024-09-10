@@ -1,23 +1,23 @@
 #include "client.h"
 
-client::client()
+Client::Client()
 {
     m_countPoint = -100;
     m_idTimeEveent = 0;
 }
 
-client::~client()
+Client::~Client()
 {
     killTimer(m_idTimeEveent);
 }
 
-void client::connectClient()
+void Client::connectClient()
 {
     QTcpSocket* socket = new QTcpSocket;
     socket->setSocketDescriptor(m_socketDeskription);
 
-    connect(socket, &QTcpSocket::readyRead, this, &client::readToClient);
-    connect(socket, &QTcpSocket::disconnected, this, &client::disconectClient);
+    connect(socket, &QTcpSocket::readyRead, this, &Client::readToClient);
+    connect(socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
     m_socket.insert(socket, "cos");
 
@@ -26,12 +26,12 @@ void client::connectClient()
 
 }
 
-void client::setsokerDeskription(qintptr socketDeskription)
+void Client::setsokerDeskription(qintptr socketDeskription)
 {
     m_socketDeskription = socketDeskription;
 }
 
-void client::readToClient()
+void Client::readToClient()
 {
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
     QDataStream in(socket);
@@ -59,7 +59,7 @@ void client::readToClient()
     }
 }
 
-void client::disconectClient()
+void Client::disconectClient()
 {
     QTcpSocket* soket = qobject_cast<QTcpSocket*>(sender());
 
@@ -76,17 +76,17 @@ void client::disconectClient()
     }
 }
 
-void client::start()
+void Client::start()
 {
     startTimer(200);
 }
 
-void client::timerEvent(QTimerEvent* event)
+void Client::timerEvent(QTimerEvent* event)
 {
     sendToClient();
 }
 
-void client::sendToClient()
+void Client::sendToClient()
 {
 
     if(m_countPoint >= 100){

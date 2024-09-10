@@ -9,13 +9,13 @@ Server::Server(qint16 nPort)
     {
         qDebug() << "Сервер запущен, порт"<< nPort;
     }
-    m_wave = new client;
+    m_wave = new Client;
     m_wave->moveToThread(&m_thread);
 
-    connect(&m_thread, &QThread::started, m_wave, &client::start);
-    connect(this, &Server::connectClient, m_wave, &client::connectClient);
+    connect(&m_thread, &QThread::started, m_wave, &Client::start);
+    connect(this, &Server::connectClient, m_wave, &Client::connectClient);
     connect(&m_thread, &QThread::finished, m_wave, &QThread::deleteLater);
-    connect(&m_thread, &QThread::finished, &m_thread, &client::deleteLater);
+    connect(&m_thread, &QThread::finished, &m_thread, &Client::deleteLater);
 
 
     m_thread.start();

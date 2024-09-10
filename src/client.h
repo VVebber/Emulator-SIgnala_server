@@ -8,15 +8,15 @@
 #include <QVector>
 #include <cmath>
 
-class client : public QObject {
+class Client : public QObject {
     Q_OBJECT
 
 
 protected:/*PROTECTED*/
 
 public:/*PUBLIC*/
-    client();
-    ~client();
+    Client();
+    ~Client();
 
     void connectClient();
 
