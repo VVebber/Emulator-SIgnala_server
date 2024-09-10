@@ -9,13 +9,13 @@ Server::Server(qint16 nPort)
     {
         qDebug() << "Сервер запущен, порт"<< nPort;
     }
-    m_wave = new WaveSimulator;
+    m_wave = new client;
     m_wave->moveToThread(&m_thread);
 
-    connect(&m_thread, &QThread::started, m_wave, &WaveSimulator::start);
-    connect(this, &Server::connectClient, m_wave, &WaveSimulator::connectClient);
+    connect(&m_thread, &QThread::started, m_wave, &client::start);
+    connect(this, &Server::connectClient, m_wave, &client::connectClient);
     connect(&m_thread, &QThread::finished, m_wave, &QThread::deleteLater);
-    connect(&m_thread, &QThread::finished, &m_thread, &WaveSimulator::deleteLater);
+    connect(&m_thread, &QThread::finished, &m_thread, &client::deleteLater);
 
 
     m_thread.start();
@@ -23,9 +23,9 @@ Server::Server(qint16 nPort)
 
 
 
-void Server::incomingConnection(qintptr sokerDeskription)
+void Server::incomingConnection(qintptr socketDeskription)
 {
-    m_wave->setsokerDeskription(sokerDeskription);
+    m_wave->setsokerDeskription(socketDeskription);
     emit connectClient();
 }
 

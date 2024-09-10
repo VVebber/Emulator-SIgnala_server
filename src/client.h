@@ -8,15 +8,15 @@
 #include <QVector>
 #include <cmath>
 
-class WaveSimulator : public QObject {
+class client : public QObject {
     Q_OBJECT
 
 
 protected:/*PROTECTED*/
 
 public:/*PUBLIC*/
-    WaveSimulator();
-    ~WaveSimulator();
+    client();
+    ~client();
 
     void connectClient();
 
@@ -35,7 +35,7 @@ private:/*PRIVATE*/
 
     QMap<QTcpSocket*, QString> m_socket;
 
-    qintptr m_sokerDeskription;
+    qintptr m_socketDeskription;
 
     int m_countPoint;
     int m_idTimeEveent;

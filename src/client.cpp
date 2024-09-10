@@ -1,23 +1,23 @@
 #include "client.h"
 
-WaveSimulator::WaveSimulator()
+client::client()
 {
     m_countPoint = -100;
     m_idTimeEveent = 0;
 }
 
-WaveSimulator::~WaveSimulator()
+client::~client()
 {
     killTimer(m_idTimeEveent);
 }
 
-void WaveSimulator::connectClient()
+void client::connectClient()
 {
     QTcpSocket* socket = new QTcpSocket;
-    socket->setSocketDescriptor(m_sokerDeskription);
+    socket->setSocketDescriptor(m_socketDeskription);
 
-    connect(socket, &QTcpSocket::readyRead, this, &WaveSimulator::readToClient);
-    connect(socket, &QTcpSocket::disconnected, this, &WaveSimulator::disconectClient);
+    connect(socket, &QTcpSocket::readyRead, this, &client::readToClient);
+    connect(socket, &QTcpSocket::disconnected, this, &client::disconectClient);
 
     m_socket.insert(socket, "cos");
 
@@ -26,12 +26,12 @@ void WaveSimulator::connectClient()
 
 }
 
-void WaveSimulator::setsokerDeskription(qintptr sokerDeskription)
+void client::setsokerDeskription(qintptr socketDeskription)
 {
-    m_sokerDeskription = sokerDeskription;
+    m_socketDeskription = socketDeskription;
 }
 
-void WaveSimulator::readToClient()
+void client::readToClient()
 {
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
     QDataStream in(socket);
@@ -59,7 +59,7 @@ void WaveSimulator::readToClient()
     }
 }
 
-void WaveSimulator::disconectClient()
+void client::disconectClient()
 {
     QTcpSocket* soket = qobject_cast<QTcpSocket*>(sender());
 
@@ -76,17 +76,17 @@ void WaveSimulator::disconectClient()
     }
 }
 
-void WaveSimulator::start()
+void client::start()
 {
     startTimer(200);
 }
 
-void WaveSimulator::timerEvent(QTimerEvent* event)
+void client::timerEvent(QTimerEvent* event)
 {
     sendToClient();
 }
 
-void WaveSimulator::sendToClient()
+void client::sendToClient()
 {
 
     if(m_countPoint >= 100){

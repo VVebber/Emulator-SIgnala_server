@@ -27,7 +27,7 @@ private:
     /*TCP/IP*/
     qint16 m_port;
 
-    WaveSimulator* m_wave;
+    client* m_wave;
 
     QThread m_thread;
 };
