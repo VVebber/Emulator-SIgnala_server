@@ -17,32 +17,30 @@ Server::Server(qint16 nPort)
     // connect(&m_thread, &QThread::finished, m_Clients, &QThread::deleteLater);
     // connect(&m_thread, &QThread::finished, &m_thread, &Client::deleteLater);
 
-    // m_thread.start();
+    m_thread.start();
 }
 
-void Server::incomingConnection(qintptr socketDeskription)
+void Server::incomingConnection(qintptr socketDescriptor)
 {
-    if(m_thread.isRunning())
-    {
-        m_thread.quit();
-    }
+    // if(m_thread.isRunning())
+    // {
+    //     m_thread.quit();
+    // }
 
     Client* newClient = new Client;
     newClient->moveToThread(&m_thread);
 
     connect(&m_thread, &QThread::started, newClient, &Client::start);
     connect(this, &Server::connectClient, newClient, &Client::connectClient);
-    connect(s,&Client::dicsonect, newClient, &Client::deleteLater);
+    connect(newClient,&Client::dicsonect, newClient, &Client::deleteLater);
     // connect(&m_thread, &QThread::finished, s, &Client::deleteLater);
     // connect(&m_thread, &QThread::finished, &m_thread, &QThread::deleteLater);
 
-    newClient->setsocketDeskription(socketDeskription);
-    emit connectClient();
+    emit connectClient(socketDescriptor);
 
     m_Clients.push_back(newClient);
 
-    m_thread.start();
-
+//    m_thread.start();
 }
 
 Server::~Server(){

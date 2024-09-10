@@ -15,10 +15,9 @@ public:
     Client();
     ~Client();
 
-    void connectClient();
-    void setsocketDeskription(qintptr socketDeskription);
-
 public slots:
+    void connectClient(qintptr socketDeskription);
+    void setsocketDeskription(qintptr socketDeskription);
     void readToClient();
     void start();
     void timerEvent(QTimerEvent *event) override;

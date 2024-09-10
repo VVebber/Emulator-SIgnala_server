@@ -19,7 +19,7 @@ public slots:
     void incomingConnection(qintptr sokerDeskription) override;
 
 signals:
-    void connectClient();
+    void connectClient(qintptr socketDeskription);
 
 private:
     qint16 m_port;

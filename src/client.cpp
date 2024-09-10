@@ -10,7 +10,7 @@ Client::Client()
 
 Client::~Client() {}
 
-void Client::connectClient()
+void Client::connectClient(qintptr socketDeskription)
 {
     m_socket = new QTcpSocket;
     m_socket->setSocketDescriptor(m_socketDeskription);
@@ -49,7 +49,7 @@ void Client::disconectClient()
     m_socket->close();
     m_socket->deleteLater();
     m_socket = nullptr;
-    //!!!!
+    emit dicsonect();
 }
 
 void Client::start()
