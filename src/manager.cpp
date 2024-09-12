@@ -1,7 +1,7 @@
 #include "manager.h"
 
 Manager::Manager() {
-    m_idTimerEvent = startTimer(1000);
+    m_idTimerEvent = startTimer(200);
     m_countPoint = -100;
 }
 
@@ -15,7 +15,6 @@ void Manager::connectClient(qintptr socketDeskription){
 
     Client* client = new Client(socket);
     connect(client, &Client::dicsonect, this, &Manager::dicsonectClient);
-
 
     m_Clients.push_back(client);
 
@@ -45,7 +44,6 @@ void Manager::dicsonectClient()
 
 void Manager::sendToClient()
 {
-
     if(m_countPoint >= 100)
     {
         m_countPoint = -100;

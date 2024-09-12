@@ -13,7 +13,7 @@ public:
 public slots:
     void timerEvent(QTimerEvent *event) override;
     void connectClient(qintptr socketDeskription);
-  //  void readToClient();
+    //void readToClient();
 
     void dicsonectClient();
 private:

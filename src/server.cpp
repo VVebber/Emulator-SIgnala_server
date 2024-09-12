@@ -12,8 +12,7 @@ Server::Server(qint16 nPort)
     m_manager = new Manager;
     connect(this, &Server::connectClient, m_manager, &Manager::connectClient);
 
-    m_manager->moveToThread(&
-                            m_thread);
+    m_manager->moveToThread(&m_thread);
 
     m_thread.start();
 }

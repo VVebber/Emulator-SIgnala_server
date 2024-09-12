@@ -16,3 +16,18 @@ void Client::disconectClient()
     m_socket = nullptr;
     emit dicsonect();
 }
+
+QTcpSocket* Client::getsocket(){
+    return m_socket;
+}
+
+QString Client::gettypeSignal() const{
+    return m_typeSignal;
+}
+
+void Client::settypeSignal(QString newtypeSignal){
+    m_typeSignal = newtypeSignal;
+}
+
+
+
