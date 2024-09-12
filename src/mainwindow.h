@@ -14,17 +14,17 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
 
 private:
-    Ui::MainWindow *m_ui;
-    Server* m_server;
+  Ui::MainWindow *m_ui;
+  Server* m_server;
 
 private slots:
-    void onStartServerClicked();
+  void onStartServerClicked();
 };
 #endif // MAINWINDOW_H

@@ -9,25 +9,25 @@
 #include <cmath>
 
 class Client : public QObject {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Client(QTcpSocket* socket);
-    //get
-    QTcpSocket* getsocket();
-    QString gettypeSignal() const;
-    //set
-    void settypeSignal(QString newtypeSignal);
+  Client(QTcpSocket* socket);
+  //get
+  QTcpSocket* getsocket();
+  QString gettypeSignal() const;
+  //set
+  void settypeSignal(QString newtypeSignal);
 
 signals:
-    void dicsonect();
+  void dicsonect();
 
 public:
-    void disconectClient();
+  void disconectClient();
 
 private:
-    QTcpSocket* m_socket;
-    QString m_typeSignal;
+  QTcpSocket* m_socket;
+  QString m_typeSignal;
 };
 
 #endif
