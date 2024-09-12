@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "client.h"
+#include "manager.h"
 #include <QTimerEvent>
 #include <QMultiMap>
 
@@ -23,7 +23,7 @@ signals:
 
 private:
     qint16 m_port;
-    QList<Client*> m_Clients;
+    Manager* m_manager;
     QThread m_thread;
 };
 

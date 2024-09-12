@@ -9,45 +9,24 @@ Server::Server(qint16 nPort)
     {
         qDebug() << "Сервер запущен, порт"<< nPort;
     }
-    // m_Clients = new Client;
-    // m_Clients->moveToThread(&m_thread);
+    m_manager = new Manager;
+    connect(this, &Server::connectClient, m_manager, &Manager::connectClient);
 
-    // connect(&m_thread, &QThread::started, m_Clients, &Client::start);
-    // connect(this, &Server::connectClient, m_Clients, &Client::connectClient);
-    // connect(&m_thread, &QThread::finished, m_Clients, &QThread::deleteLater);
-    // connect(&m_thread, &QThread::finished, &m_thread, &Client::deleteLater);
+    m_manager->moveToThread(&
+                            m_thread);
 
     m_thread.start();
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-    // if(m_thread.isRunning())
-    // {
-    //     m_thread.quit();
-    // }
-
-    Client* newClient = new Client;
-    newClient->moveToThread(&m_thread);
-
-    connect(&m_thread, &QThread::started, newClient, &Client::start);
-    connect(this, &Server::connectClient, newClient, &Client::connectClient);
-    connect(newClient,&Client::dicsonect, newClient, &Client::deleteLater);
-    // connect(&m_thread, &QThread::finished, s, &Client::deleteLater);
-    // connect(&m_thread, &QThread::finished, &m_thread, &QThread::deleteLater);
-
     emit connectClient(socketDescriptor);
-
-    m_Clients.push_back(newClient);
-
-//    m_thread.start();
 }
 
 Server::~Server(){
     m_thread .quit();
     m_thread .wait();
     m_thread.deleteLater();
-    //delete m_Clients;
 }
 
 bool Server::isServerRunning() const

@@ -12,28 +12,26 @@ class Client : public QObject {
     Q_OBJECT
 
 public:
-    Client();
-    ~Client();
+    Client(QTcpSocket* socket);
 
-public slots:
-    void connectClient(qintptr socketDeskription);
-    void setsocketDeskription(qintptr socketDeskription);
-    void readToClient();
-    void start();
-    void timerEvent(QTimerEvent *event) override;
-    void disconectClient();
+    QTcpSocket* getsocket(){
+        return m_socket;
+    }
+
+    QString gettypeSignal() const{
+        return m_typeSignal;
+    }
 
 signals:
     void dicsonect();
 
-private:
-    QTcpSocket* m_socket;
-    qintptr m_socketDeskription;
-    QString typeSignal;
-    int m_countPoint;
+public:
+    void disconectClient();
 
 private:
-    void  sendToClient();
+    QTcpSocket* m_socket;
+    QString m_typeSignal;
+
 };
 
 #endif
