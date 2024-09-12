@@ -22,6 +22,7 @@ void Server::incomingConnection(qintptr socketDescriptor)
 }
 
 Server::~Server(){
+  delete m_manager;
   m_thread .quit();
   m_thread .wait();
 }
