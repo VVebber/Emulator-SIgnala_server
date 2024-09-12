@@ -18,6 +18,7 @@ public:
     QString gettypeSignal() const;
     //set
     void settypeSignal(QString newtypeSignal);
+
 signals:
     void dicsonect();
 

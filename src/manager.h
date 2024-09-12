@@ -14,8 +14,8 @@ public slots:
     void timerEvent(QTimerEvent *event) override;
     void connectClient(qintptr socketDeskription);
     void readToClient();
-
     void dicsonectClient();
+
 private:
     QList<Client*> m_clients;
     int m_idTimerEvent;

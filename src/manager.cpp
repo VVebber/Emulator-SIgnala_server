@@ -65,7 +65,6 @@ void Manager::readToClient(){
                 m_clients.at(i)->settypeSignal(str);
                 break;
             }
-
         }
         qDebug() <<"Receive request: "<< str;
     }
