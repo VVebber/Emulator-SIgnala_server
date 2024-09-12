@@ -23,7 +23,7 @@ signals:
 
 private:
   qint16 m_port;
-  Manager* m_manager;
+  // Manager* m_manager;
   QThread m_thread;
 };
 

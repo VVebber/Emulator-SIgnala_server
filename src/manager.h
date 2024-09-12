@@ -1,5 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
+
+#include <QMutex>
 #include "client.h"
 
 class Manager : public QObject
@@ -7,28 +9,24 @@ class Manager : public QObject
   Q_OBJECT
 
 public:
-  static Manager* getManager();
+  static Manager* getInstance();
+  static void freeInstance();
+
   Manager(const Manager&) = delete;
-  void operator=(const Manager&) = delete;
   ~Manager();
+  void operator=(const Manager&) = delete;
 
 public slots:
-  void timerEvent(QTimerEvent *event) override;
   void connectClient(qintptr socketDeskription);
-  void readToClient();
   void dicsonectClient();
 
-  // singletone - паттерн одиночка c++
-
 private:
-  static Manager* sm_manager;
+  static Manager* m_instance;
   QList<Client*> m_clients;
-  int m_idTimerEvent;
-  int m_countPoint;
+  QMutex m_mutex;
 
 private:
-  Manager();
-  void sendToClient();
+  Manager() = default;
 };
 
 #endif // MANAGER_H
