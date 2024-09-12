@@ -3,11 +3,11 @@ Server::Server(qint16 nPort)
 {
   if (!this->listen(QHostAddress::Any, nPort))
   {
-    qDebug() <<"Невозможно запустить сервер.";
+    qDebug() <<"Unable to start server.";
   }
   else
   {
-    qDebug() << "Сервер запущен, порт"<< nPort;
+    qDebug() << "Server is running, port"<< nPort;
   }
   m_manager = new Manager;
   connect(this, &Server::connectClient, m_manager, &Manager::connectClient);
