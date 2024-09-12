@@ -6,9 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
   , m_ui(new Ui::MainWindow)
   , m_server(nullptr)
 {
-
   m_ui->setupUi(this);
-
   connect(m_ui->StartServer, &QPushButton::clicked, this, &MainWindow::onStartServerClicked);
 }
 
@@ -34,7 +32,7 @@ void MainWindow::onStartServerClicked()
     }
     else
     {
-      qDebug()<<"There were problems connecting to the server";
+      qDebug()<<"There are problems connecting to the server";
       state = "0";
       delete m_server;
       m_server = nullptr;

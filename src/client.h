@@ -14,10 +14,10 @@ class Client : public QObject {
 public:
   Client(QTcpSocket* socket);
   //get
-  QTcpSocket* getsocket();
-  QString gettypeSignal() const;
+  QTcpSocket* getSocket();
+  QString getTypeSignal() const;
   //set
-  void settypeSignal(QString newtypeSignal);
+  void setTypeSignal(QString newtypeSignal);
 
 signals:
   void dicsonect();

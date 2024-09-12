@@ -9,7 +9,7 @@ Server::Server(qint16 nPort)
   {
     qDebug() << "Server is running, port"<< nPort;
   }
-  m_manager = new Manager;
+  m_manager = Manager::getManager();
   connect(this, &Server::connectClient, m_manager, &Manager::connectClient);
   m_manager->moveToThread(&m_thread);
 
@@ -24,7 +24,6 @@ void Server::incomingConnection(qintptr socketDescriptor)
 Server::~Server(){
   m_thread .quit();
   m_thread .wait();
-  m_thread.deleteLater();
 }
 
 bool Server::isServerRunning() const

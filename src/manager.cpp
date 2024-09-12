@@ -2,6 +2,7 @@
 #include <QMutex>
 
 QMutex mutex;
+Manager* Manager::sm_manager = nullptr;
 
 Manager::Manager() {
   m_idTimerEvent = startTimer(100);
@@ -10,6 +11,15 @@ Manager::Manager() {
 
 Manager::~Manager(){
   killTimer(m_idTimerEvent);
+
+}
+
+Manager* Manager::getManager(){
+  if(sm_manager == nullptr)
+  {
+    sm_manager = new Manager();
+  }
+  return sm_manager;
 }
 
 void Manager::connectClient(qintptr socketDeskription)
@@ -60,9 +70,9 @@ void Manager::readToClient(){
     in >> str;
     for(qsizetype i = 0; i < m_clients.size(); ++i)
     {
-      if(socket == m_clients.at(i)->getsocket())
+      if(socket == m_clients.at(i)->getSocket())
       {
-        m_clients.at(i)->settypeSignal(str);
+        m_clients.at(i)->setTypeSignal(str);
         break;
       }
     }
@@ -86,29 +96,29 @@ void Manager::sendToClient()
   QMutexLocker locker(&mutex);
   for(qsizetype i = 0; i < m_clients.size(); ++i)
   {
-    if(m_clients.at(i)->getsocket()->isOpen())
+    if(m_clients.at(i)->getSocket()->isOpen())
     {
-      if (m_clients.at(i)->gettypeSignal() == "sin")
+      if (m_clients.at(i)->getTypeSignal() == "sin")
       {
         Point.setY(50 * std::sin(m_countPoint * M_PI / 50));
       }
-      else if (m_clients.at(i)->gettypeSignal() == "cos")
+      else if (m_clients.at(i)->getTypeSignal() == "cos")
       {
         Point.setY(50 * std::cos(m_countPoint * M_PI / 50));
       }
-      else if (m_clients.at(i)->gettypeSignal() == "tan")
+      else if (m_clients.at(i)->getTypeSignal() == "tan")
       {
         Point.setY(50 * std::tan(m_countPoint * M_PI / 50));
       }
-      else if (m_clients.at(i)->gettypeSignal() == "atan")
+      else if (m_clients.at(i)->getTypeSignal() == "atan")
       {
         Point.setY(50 * std::atan(m_countPoint * M_PI / 50));
       }
-      else if (m_clients.at(i)->gettypeSignal() == "acos")
+      else if (m_clients.at(i)->getTypeSignal() == "acos")
       {
         Point.setY(30 * std::acos(m_countPoint / 150.0));
       }
-      else if (m_clients.at(i)->gettypeSignal() == "asin")
+      else if (m_clients.at(i)->getTypeSignal() == "asin")
       {
         Point.setY(40 * std::asin(m_countPoint / 100.0));
       }
@@ -118,8 +128,8 @@ void Manager::sendToClient()
       QDataStream out(&Data, QIODevice::WriteOnly);
       out.setVersion(QDataStream::Qt_5_15);
       out << Point;
-      m_clients.at(i)->getsocket()->write(Data);
-      m_clients.at(i)->getsocket()->flush();
+      m_clients.at(i)->getSocket()->write(Data);
+      m_clients.at(i)->getSocket()->flush();
       m_countPoint++;
       QThread::msleep(100);
     }

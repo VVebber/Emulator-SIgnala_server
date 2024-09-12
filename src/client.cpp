@@ -17,14 +17,14 @@ void Client::disconectClient()
 }
 
 
-QTcpSocket* Client::getsocket(){
+QTcpSocket* Client::getSocket(){
   return m_socket;
 }
 
-QString Client::gettypeSignal() const{
+QString Client::getTypeSignal() const{
   return m_typeSignal;
 }
 
-void Client::settypeSignal(QString newtypeSignal){
+void Client::setTypeSignal(QString newtypeSignal){
   m_typeSignal = newtypeSignal;
 }
