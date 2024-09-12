@@ -6,7 +6,6 @@ Client::Client(QTcpSocket* socket)
     m_socket = socket;
 
     connect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
-
 }
 
 void Client::disconectClient()

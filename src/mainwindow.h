@@ -26,6 +26,5 @@ private:
 
 private slots:
     void onStartServerClicked();
-
 };
 #endif // MAINWINDOW_H

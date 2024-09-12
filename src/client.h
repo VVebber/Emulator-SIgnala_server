@@ -28,7 +28,6 @@ public:
 private:
     QTcpSocket* m_socket;
     QString m_typeSignal;
-
 };
 
 #endif

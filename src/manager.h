@@ -23,7 +23,6 @@ private:
 
 private:
     void sendToClient();
-
 };
 
 #endif // MANAGER_H
