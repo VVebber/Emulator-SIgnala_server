@@ -37,8 +37,8 @@ void Server::setting()
 
 Server::~Server()
 {
-    m_thread .quit();
-    m_thread .wait();
+    m_thread.quit();
+    m_thread.wait();
 
     QTcpServer::close();
 
