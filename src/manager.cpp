@@ -25,8 +25,8 @@ Manager::~Manager()
     QMutexLocker locker(&m_mutex);
     for(int i = 0; i < m_clients.size(); ++i)
     {
+        emit m_clients.at(i)->disconnect();
         disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
-        delete m_clients.at(i);
     }
 
     m_clients.clear();

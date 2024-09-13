@@ -3,6 +3,7 @@
 Client::Client()
 {
     m_typeSignal = "sin";
+    m_countPoint = -100;
     m_idTimerEvent = startTimer(200);
 }
 
@@ -16,6 +17,7 @@ void Client::connection(qintptr socketDeskription){
 
 Client::~Client()
 {
+    qDebug() <<"Delete object" <<this;
     close();
 }
 
@@ -31,6 +33,7 @@ QString Client::name() const
 
 void Client::disconectClient()
 {
+    qDebug() << "socker disconect, object" << this;
     close();
     emit dicsonect();
 }
@@ -44,6 +47,7 @@ void Client::readToClient(){
         QString str;
         in >> str;
         m_typeSignal = str;
+        m_countPoint = -100;
 
         qDebug() <<"Receive request: "<< str;
     }
@@ -55,10 +59,9 @@ void Client::readToClient(){
 
 void Client::close()
 {
-    killTimer(m_idTimerEvent);
-
     if(m_socket)
     {
+        qDebug() <<this<< "delete";
         disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
         disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
