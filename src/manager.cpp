@@ -27,7 +27,7 @@ Manager::~Manager()
     {
         disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
         m_clients.at(i)->deleteLater();
-        m_clients.at(i) = nullptr;
+        m_clients[i] = nullptr;
         qDebug() <<"desManager" << m_clients.at(i);
 
     }
