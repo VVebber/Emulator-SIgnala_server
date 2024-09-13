@@ -9,7 +9,8 @@ void Server::incomingConnection(qintptr socketDescriptor)
     emit connectClient(socketDescriptor);
 }
 
-bool Server::connection(){
+bool Server::connection()
+{
     if(isListening()){
         qDebug() << "the server is already running";
         return false;
@@ -34,7 +35,8 @@ void Server::setting()
     m_thread.start();
 }
 
-Server::~Server(){
+Server::~Server()
+{
     m_thread .quit();
     m_thread .wait();
 

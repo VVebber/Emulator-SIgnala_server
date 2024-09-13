@@ -7,7 +7,8 @@ Client::Client()
     m_idTimerEvent = startTimer(200);
 }
 
-void Client::connection(qintptr socketDeskription){
+void Client::connection(qintptr socketDeskription)
+{
     m_socket = new QTcpSocket;
     m_socket->setSocketDescriptor(socketDeskription);
     connect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
@@ -36,7 +37,8 @@ void Client::disconectClient()
     emit dicsonect();
 }
 
-void Client::readToClient(){
+void Client::readToClient()
+{
     QDataStream in(m_socket);
     in.setVersion(QDataStream::Qt_5_15);
 
