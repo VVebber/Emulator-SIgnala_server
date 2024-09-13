@@ -17,7 +17,6 @@ void Client::connection(qintptr socketDeskription){
 
 Client::~Client()
 {
-    qDebug() <<"Delete object" <<this;
     close();
 }
 
@@ -33,7 +32,6 @@ QString Client::name() const
 
 void Client::disconectClient()
 {
-    qDebug() << "socker disconect, object" << this;
     close();
     emit dicsonect();
 }
@@ -59,9 +57,14 @@ void Client::readToClient(){
 
 void Client::close()
 {
+    if(m_idTimerEvent != 0)
+    {
+        killTimer((m_idTimerEvent));
+        m_idTimerEvent = 0;
+    }
     if(m_socket)
     {
-        qDebug() <<this<< "delete";
+        qDebug() <<this<< "delete CLOSE";
         disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
         disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
