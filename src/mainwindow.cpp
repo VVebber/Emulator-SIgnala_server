@@ -25,15 +25,16 @@ void MainWindow::onStartServerClicked()
   {
     QString state = "";
     m_server = new Server(m_ui->spinPort->value());
-    if(m_server->isServerRunning())
+    if(m_server->connection())
     {
+      m_server->setting();
+
       state = "1";
-      qDebug()<<"Server is connected";
     }
     else
     {
-      qDebug()<<"There are problems connecting to the server";
       state = "0";
+
       delete m_server;
       m_server = nullptr;
     }

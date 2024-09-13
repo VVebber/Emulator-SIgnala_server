@@ -12,7 +12,7 @@ class Client : public QObject {
   Q_OBJECT
 
 public:
-  Client(qintptr socketDeskription);
+  Client();
   ~Client();
 
   QString name() const;
@@ -21,6 +21,8 @@ signals:
   void dicsonect();
 
 public slots:
+  //void disabling();
+  void connection(qintptr socketDeskription);
   void timerEvent(QTimerEvent *event) override;
   void disconectClient();
   void readToClient();

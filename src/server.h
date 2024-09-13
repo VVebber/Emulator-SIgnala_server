@@ -11,9 +11,10 @@ class Server : public QTcpServer
   Q_OBJECT
 
 public:
-  Server(qint16 nPort);
+  Server(qint16 nPort = 1024);
   ~Server();
-  bool isServerRunning() const;
+  bool connection();
+  void setting();
 
 public slots:
   void incomingConnection(qintptr sokerDeskription) override;
