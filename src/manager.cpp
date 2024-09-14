@@ -1,6 +1,7 @@
 #include "manager.h"
 #include <QMutex>
 
+
 Manager* Manager::m_instance = nullptr;
 
 Manager* Manager::getInstance(){
@@ -26,13 +27,14 @@ Manager::~Manager()
     for(int i = 0; i < m_clients.size(); ++i)
     {
         QMetaObject::invokeMethod(m_clients.at(i), "deleteClient", Qt::QueuedConnection);
-        //emit m_clients.at(i)->disconectClient();
-        disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
-        //delete m_clients[i];
 
-        //m_clients.at(i)->deleteLater();
+        disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
+
         qDebug() <<"desManager" << m_clients.at(i);
+        QThread::sleep(1);
+
     }
+    qDebug() <<"size "<<m_clients.size();
     m_clients.clear();
 }
 
@@ -43,7 +45,7 @@ void Manager::connectClient(qintptr socketDeskription)
     connect(client, &Client::dicsonect, this, &Manager::dicsonectClient);
     m_clients.push_back(client);
 
-    qDebug() << "Connect client:" << client->name() <<"\n";
+    qDebug() << "Connect client:" << client->name();
 }
 
 void Manager::dicsonectClient()
@@ -53,7 +55,7 @@ void Manager::dicsonectClient()
 
     if (m_clients.removeOne(client))
     {
-        qDebug() << "Dicsonnect client" << client->name() <<"\n";
+        qDebug() << "Dicsonnect client" << client->name();
     }
     else
     {
