@@ -25,11 +25,13 @@ Manager::~Manager()
     QMutexLocker locker(&m_mutex);
     for(int i = 0; i < m_clients.size(); ++i)
     {
+        QMetaObject::invokeMethod(m_clients.at(i), "deleteClient", Qt::QueuedConnection);
+        //emit m_clients.at(i)->disconectClient();
         disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
-        m_clients.at(i)->deleteLater();
-        m_clients[i] = nullptr;
-        qDebug() <<"desManager" << m_clients.at(i);
+        //delete m_clients[i];
 
+        //m_clients.at(i)->deleteLater();
+        qDebug() <<"desManager" << m_clients.at(i);
     }
     m_clients.clear();
 }

@@ -76,6 +76,12 @@ void Client::close()
     }
 }
 
+void Client::deleteClient()
+{
+    close();
+    delete this;
+}
+
 void Client::timerEvent(QTimerEvent *event)
 {
     sendToClient();

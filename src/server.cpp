@@ -37,11 +37,11 @@ void Server::setting()
 
 Server::~Server()
 {
-    m_thread.quit();
-    m_thread.wait();
-
     QTcpServer::close();
 
     disconnect(this, &Server::connectClient, Manager::getInstance(), &Manager::connectClient);
     Manager::freeInstance();
+
+    m_thread.quit();
+    m_thread.wait();
 }
