@@ -17,6 +17,7 @@ public:
 
 public slots:
   void incomingConnection(qintptr sokerDeskription) override;
+  void close();
 
 signals:
   void connectClient(qintptr socketDeskription);

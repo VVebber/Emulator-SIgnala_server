@@ -5,41 +5,43 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-    qRegisterMetaType<qintptr>("qintptr");
-    Manager::getInstance()->start();
+  QCoreApplication a(argc, argv);
+  qRegisterMetaType<qintptr>("qintptr");
+  Manager::getInstance()->start();
 
-    Server* server = nullptr;
+  Server* server = nullptr;
 
-    if (argc != 3)
+  if (argc != 3)
+  {
+    return 1;
+  }
+
+  QStringList args = a.arguments();
+  int port = 1024;
+  int portArgIndex = args.indexOf("-p");
+  if(portArgIndex < 0 || portArgIndex == 2)
+  {
+    return 2;
+  }
+  else
+  {
+    QString portStr = args[portArgIndex + 1];
+    bool isOk = true;
+    int argPort = portStr.toInt(&isOk);
+
+    if (!isOk)
     {
-      return 1;
+      return 3;
     }
 
-    QStringList args = a.arguments();
-    int port = 1024;
-    int portArgIndex = args.indexOf("-p");
-    if(portArgIndex < 0 || portArgIndex == 2)
-    {
-      return 2;
-    }
-    else
-    {
-      QString portStr = args[portArgIndex + 1];
-      bool isOk = true;
-      int argPort = portStr.toInt(&isOk);
+    port = argPort;
+  }
 
-      if (!isOk)
-      {
-        return 3;
-      }
+  server = new Server(port);
+  server->connection();
 
-      port = argPort;
-    }
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, server, &Server::close);
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, Manager::getInstance(), &Manager::deleteLater);
 
-
-    server = new Server(port);
-    server->connection();
-
-    return a.exec();
+  return a.exec();
 }

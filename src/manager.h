@@ -12,10 +12,11 @@ public:
   static Manager* getInstance();
   static void freeInstance();
   void start();
+  void close();
 
   Manager(const Manager&) = delete;
-  ~Manager();
   void operator=(const Manager&) = delete;
+  ~Manager();
 
 public slots:
   void connectClient(qintptr socketDeskription);
