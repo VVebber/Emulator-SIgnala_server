@@ -1,5 +1,7 @@
 #include "client.h"
 
+const float M_PI = 3.14;
+
 Client::Client()
 {
     m_typeSignal = "sin";
@@ -18,7 +20,7 @@ void Client::connection(qintptr socketDeskription)
 
 Client::~Client()
 {
-    qDebug() << "destructor";
+    qDebug() << QThread::currentThreadId() << "destructor Client";
     close();
 }
 
@@ -34,7 +36,7 @@ QString Client::name() const
 
 void Client::disconectClient()
 {
-    qDebug() << "disconectClient";
+    qDebug() << QThread::currentThreadId() << "disconectClient";
     close();
     emit dicsonect();
 }
@@ -51,7 +53,7 @@ void Client::readToClient()
         m_typeSignal = str;
         m_countPoint = -100;
 
-        qDebug() <<"Receive request: "<< str;
+        qDebug() << QThread::currentThreadId() <<"Receive request: "<< str;
     }
     else
     {
@@ -69,7 +71,7 @@ void Client::close()
 
     if(m_socket)
     {
-        qDebug() <<this<< "close socket";
+        qDebug() << QThread::currentThreadId() << this << "close socket";
         disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
         disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
@@ -79,7 +81,7 @@ void Client::close()
     }
     else
     {
-        qDebug() <<"the socket has already been closed";
+        qDebug() << QThread::currentThreadId() <<"the socket has already been closed";
     }
 }
 

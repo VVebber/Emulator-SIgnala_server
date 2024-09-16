@@ -1,14 +1,18 @@
-#include "mainwindow.h"
+#include "server.h"
 
-#include <QApplication>
+#include <QCoreApplication>
+
 
 int main(int argc, char *argv[])
 {
-  QApplication a(argc, argv);
+    QCoreApplication a(argc, argv);
+    qRegisterMetaType<qintptr>("qintptr");
 
-  qRegisterMetaType<qintptr>("qintptr");
+    Manager::getInstance()->start();
 
-  MainWindow w;
-  w.show();
-  return a.exec();
+    Server* server = nullptr;
+    server = new Server(QString(argv[a.arguments().indexOf("-p") + 1]).toInt());
+    server->connection();
+
+    return a.exec();
 }
