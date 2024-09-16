@@ -1,4 +1,5 @@
 #include "client.h"
+#include <QDataStream>
 
 const float M_PI = 3.14;
 

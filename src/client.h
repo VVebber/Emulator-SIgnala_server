@@ -1,7 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <QMessageBox>
+
 #include <QThread>
 #include <QTcpServer>
 #include <QTcpSocket>

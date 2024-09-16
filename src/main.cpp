@@ -11,7 +11,9 @@ int main(int argc, char *argv[])
     Manager::getInstance()->start();
 
     Server* server = nullptr;
-    server = new Server(QString(argv[a.arguments().indexOf("-p") + 1]).toInt());
+    int Port = QString(argv[a.arguments().indexOf("-p") + 1]).toInt();
+
+    server = new Server(Port != 0? Port : 1024);
     server->connection();
 
     return a.exec();
