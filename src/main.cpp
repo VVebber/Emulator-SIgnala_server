@@ -1,6 +1,21 @@
 #include "server.h"
+#include <iostream>
 
+#include <QSysInfo>
 #include <QCoreApplication>
+
+
+#ifdef Q_OS_LINUX
+#define LInux
+#endif
+
+#ifdef LInux
+#include <signal.h>
+#endif
+void signal(int s){
+  std::cout<<"exit from signal";
+  QCoreApplication::instance()->quit();
+}
 
 
 int main(int argc, char *argv[])
@@ -38,6 +53,10 @@ int main(int argc, char *argv[])
     port = argPort;
   }
 
+#ifdef LInux
+  signal(SIGINT,signal);
+  signal(SIGTERM,signal);
+#endif
   server = new Server(port);
   server->connection();
 
