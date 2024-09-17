@@ -1,44 +1,40 @@
 #include "server.h"
 Server::Server(qint16 nPort)
 {
-  qDebug() <<QThread::currentThreadId()<<"constructor server";
-  connect(this, &Server::connectClient, Manager::getInstance(), &Manager::connectClient);
-
   m_port = nPort;
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-  qDebug() <<QThread::currentThreadId()<<" incomingConnection server";
   emit connectClient(socketDescriptor);
 }
 
 bool Server::connection()
 {
   if(isListening()){
-    qDebug() <<QThread::currentThreadId()<< "the server is already running";
+    qDebug() << "the server is already running";
     return false;
   }
   else if(!listen(QHostAddress::Any, m_port))
   {
-    qDebug() <<QThread::currentThreadId()<<"Unable to start server.";
+    qDebug() <<"Unable to start server.";
     return false;
   }
   else
   {
-    qDebug() <<QThread::currentThreadId()<< "Server is running, port"<< m_port;
+    qDebug() << "Server is running, port"<< m_port;
+    connect(this, &Server::connectClient, &Manager::getInstance(), &Manager::connectClient);
     return true;
   }
 }
 
-void Server::close()
-{
+void Server::closeServer(){
   QTcpServer::close();
 
-  disconnect(this, &Server::connectClient, Manager::getInstance(), &Manager::connectClient);
-  Manager::getInstance()->close();
+  disconnect(this, &Server::connectClient, &Manager::getInstance(), &Manager::connectClient);
+  Manager::getInstance();
 }
 
-Server::~Server()
-{
+Server::~Server(){
+  //Manager::freeInstance();
 }

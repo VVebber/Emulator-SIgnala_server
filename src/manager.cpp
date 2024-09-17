@@ -1,45 +1,11 @@
 #include "manager.h"
 #include <QMutex>
 
+Manager::Manager(){}
 
-Manager* Manager::m_instance = nullptr;
-
-Manager* Manager::getInstance(){
-  if(m_instance == nullptr)
-  {
-    m_instance = new Manager();
-  }
-  return m_instance;
-}
-
-void Manager::freeInstance()
-{
-  if(m_instance != nullptr)
-  {
-    delete m_instance;
-    m_instance = nullptr;
-  }
-}
-
-void Manager::start()
-{
-  m_instance->moveToThread(&m_thread);
-  m_thread.start();
-}
-
-void Manager::close()
-{
-  if(!m_thread.isRunning())
-  {
-    return;
-  }
-  QMutexLocker locker(&m_mutex);
-  for(int i = 0; i < m_clients.size(); ++i)
-  {
-    disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
-    delete m_clients.at(i);
-  }
-  m_clients.clear();
+Manager& Manager::getInstance(){
+  static Manager instance;
+  return instance;
 }
 
 Manager::~Manager()
@@ -49,15 +15,41 @@ Manager::~Manager()
   m_thread.wait();
 }
 
+void Manager::startThread()
+{
+  getInstance().moveToThread(&m_thread);
+  m_thread.start();
+}
+
+void Manager::closeManager()
+{
+  if(!m_thread.isRunning())
+  {
+    return;
+  }
+  QMutexLocker locker(&m_mutex);
+  for(int i = 0; i < m_clients.size(); ++i)
+  {
+    QMetaObject::invokeMethod(m_clients.at(i), "deleteClient", Qt::QueuedConnection);
+
+    disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
+
+    qDebug() <<"desManager" << m_clients.at(i);
+    QThread::sleep(1);
+
+  }
+  qDebug() <<"size "<<m_clients.size();
+  m_clients.clear();
+}
+
 void Manager::connectClient(qintptr socketDeskription)
 {
   Client* client = new Client;
   client->connection(socketDeskription);
   connect(client, &Client::dicsonect, this, &Manager::dicsonectClient);
-  connect(this, &Manager::deletedeleteClient, client, &Client::deleteClient);
   m_clients.push_back(client);
 
-  qDebug() << QThread::currentThreadId() << "Connect client:" << client->name();
+  qDebug() << "Connect client:" << client->name();
 }
 
 void Manager::dicsonectClient()
@@ -67,11 +59,11 @@ void Manager::dicsonectClient()
 
   if (m_clients.removeOne(client))
   {
-    qDebug() << QThread::currentThreadId() << "Dicsonnect client" << client->name();
+    qDebug() << "Dicsonnect client" << client->name();
   }
   else
   {
-    qWarning() << QThread::currentThreadId() << "Unknown client" << client->name();
+    qWarning() << "Unknown client" << client->name() <<"\n";
   }
   delete client;
 }

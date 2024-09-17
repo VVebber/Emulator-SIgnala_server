@@ -1,7 +1,6 @@
 #include "client.h"
+#include <QPoint>
 #include <QDataStream>
-
-const float M_PI = 3.14;
 
 Client::Client()
 {
@@ -21,7 +20,7 @@ void Client::connection(qintptr socketDeskription)
 
 Client::~Client()
 {
-    qDebug() << QThread::currentThreadId() << "destructor Client";
+    qDebug() << "destructor";
     close();
 }
 
@@ -37,7 +36,7 @@ QString Client::name() const
 
 void Client::disconectClient()
 {
-    qDebug() << QThread::currentThreadId() << "disconectClient";
+    qDebug() << "disconectClient";
     close();
     emit dicsonect();
 }
@@ -54,7 +53,7 @@ void Client::readToClient()
         m_typeSignal = str;
         m_countPoint = -100;
 
-        qDebug() << QThread::currentThreadId() <<"Receive request: "<< str;
+        qDebug() <<"Receive request: "<< str;
     }
     else
     {
@@ -72,7 +71,7 @@ void Client::close()
 
     if(m_socket)
     {
-        qDebug() << QThread::currentThreadId() << this << "close socket";
+        qDebug() <<this<< "close socket";
         disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
         disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
@@ -82,14 +81,8 @@ void Client::close()
     }
     else
     {
-        qDebug() << QThread::currentThreadId() <<"the socket has already been closed";
+        qDebug() <<"the socket has already been closed";
     }
-}
-
-void Client::deleteClient()
-{
-    close();
-    delete this;
 }
 
 void Client::timerEvent(QTimerEvent *event)

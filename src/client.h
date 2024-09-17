@@ -1,7 +1,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-
 #include <QThread>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -26,7 +25,6 @@ public slots:
   void timerEvent(QTimerEvent *event) override;
   void disconectClient();
   void readToClient();
-  void deleteClient();
 
 private:  
   void close();

@@ -14,10 +14,10 @@ public:
   Server(qint16 nPort = 1024);
   ~Server();
   bool connection();
+  void closeServer();
 
 public slots:
   void incomingConnection(qintptr sokerDeskription) override;
-  void close();
 
 signals:
   void connectClient(qintptr socketDeskription);
