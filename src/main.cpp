@@ -1,34 +1,31 @@
 #include "server.h"
+#include "manager.h"
 #include <iostream>
 
 #include <QSysInfo>
 #include <QCoreApplication>
-
+#include <QThread>
 
 #ifdef Q_OS_LINUX
-#define LInux
-#endif
-
-#ifdef LInux
 #include <signal.h>
 #endif
-void signal(int s){
-  std::cout<<"exit from signal";
+
+void signal(int s)
+{
+  std::cout<<"exit from signal" << std::endl;
   QCoreApplication::instance()->quit();
 }
 
 
 int main(int argc, char *argv[])
 {
+  qDebug() <<QThread::currentThreadId() <<"start";
   QCoreApplication a(argc, argv);
   qRegisterMetaType<qintptr>("qintptr");
-  Manager::getInstance().startThread();
-
-  Server* server = nullptr;
+  Manager &instance = Manager::getInstance();
 
   if (argc != 3)
   {
-
     return 1;
   }
 
@@ -53,16 +50,21 @@ int main(int argc, char *argv[])
     port = argPort;
   }
 
-#ifdef LInux
+#ifdef Q_OS_LINUX
   signal(SIGINT,signal);
   signal(SIGTERM,signal);
 #endif
-  server = new Server(port);
-  server->connection();
 
-  QObject::connect(&a, &QCoreApplication::aboutToQuit, server, &Server::close);
-  QObject::connect(&a, &QCoreApplication::aboutToQuit, server, &Server::deleteLater);
-  QObject::connect(&a, &QCoreApplication::aboutToQuit, &Manager::getInstance(), &Manager::deleteLater);
+  Server server(port);
+  server.startServer();
 
-  return a.exec();
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, &server, &Server::finishServer);
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, &instance, &Manager::closeManager);
+
+  int result = a.exec();
+
+  Manager::resetInstance();
+  qDebug()<<"exit";
+
+  return result;
 }

@@ -1,10 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "manager.h"
-#include <QTimerEvent>
-#include <QMultiMap>
-
+#include <QTcpServer>
 
 class Server : public QTcpServer
 {
@@ -13,8 +10,8 @@ class Server : public QTcpServer
 public:
   Server(qint16 nPort = 1024);
   ~Server();
-  bool connection();
-  void closeServer();
+  bool startServer();
+  void finishServer();
 
 public slots:
   void incomingConnection(qintptr sokerDeskription) override;

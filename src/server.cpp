@@ -1,4 +1,6 @@
+#include "manager.h"
 #include "server.h"
+
 Server::Server(qint16 nPort)
 {
   m_port = nPort;
@@ -9,9 +11,10 @@ void Server::incomingConnection(qintptr socketDescriptor)
   emit connectClient(socketDescriptor);
 }
 
-bool Server::connection()
+bool Server::startServer()
 {
-  if(isListening()){
+  if(isListening())
+  {
     qDebug() << "the server is already running";
     return false;
   }
@@ -24,17 +27,18 @@ bool Server::connection()
   {
     qDebug() << "Server is running, port"<< m_port;
     connect(this, &Server::connectClient, &Manager::getInstance(), &Manager::connectClient);
+
     return true;
   }
 }
 
-void Server::closeServer(){
-  QTcpServer::close();
+void Server::finishServer(){
+  qDebug() <<QThread::currentThreadId() <<"closeServer";
+  close();
 
   disconnect(this, &Server::connectClient, &Manager::getInstance(), &Manager::connectClient);
-  Manager::getInstance();
 }
 
 Server::~Server(){
-  //Manager::freeInstance();
+  qDebug() << QThread::currentThreadId() <<"destructorServer";
 }

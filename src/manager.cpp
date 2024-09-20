@@ -1,24 +1,34 @@
 #include "manager.h"
 #include <QMutex>
 
-Manager::Manager(){}
+Manager* Manager::sm_instance = nullptr;
 
-Manager& Manager::getInstance(){
-  static Manager instance;
-  return instance;
+Manager::Manager()
+{
+  qDebug() <<QThread::currentThreadId() << Q_FUNC_INFO;
+  connect(this, &Manager::finished, &m_thread, &QThread::quit, Qt::DirectConnection);// TODO qq
+  moveToThread(&m_thread);
+  m_thread.start();
+}
+
+Manager& Manager::getInstance()
+{
+  if(sm_instance == nullptr)
+    sm_instance = new Manager;
+  return *sm_instance;
 }
 
 Manager::~Manager()
 {
-  qDebug() << QThread::currentThreadId()<< "destructor Manager";
+  qDebug() <<QThread::currentThreadId() << Q_FUNC_INFO;
   m_thread.quit();
-  m_thread.wait();
 }
 
-void Manager::startThread()
+void Manager::resetInstance()
 {
-  getInstance().moveToThread(&m_thread);
-  m_thread.start();
+  qDebug() <<QThread::currentThreadId() << Q_FUNC_INFO;
+  sm_instance->m_thread.wait();
+  delete sm_instance;
 }
 
 void Manager::closeManager()
@@ -27,29 +37,25 @@ void Manager::closeManager()
   {
     return;
   }
+  qDebug() <<QThread::currentThreadId() << Q_FUNC_INFO;
   QMutexLocker locker(&m_mutex);
   for(int i = 0; i < m_clients.size(); ++i)
   {
-    QMetaObject::invokeMethod(m_clients.at(i), "deleteClient", Qt::QueuedConnection);
-
     disconnect(m_clients.at(i), &Client::dicsonect, this, &Manager::dicsonectClient);
-
-    qDebug() <<"desManager" << m_clients.at(i);
-    QThread::sleep(1);
-
+    delete m_clients.at(i);
   }
-  qDebug() <<"size "<<m_clients.size();
   m_clients.clear();
+  emit finished();
 }
 
 void Manager::connectClient(qintptr socketDeskription)
 {
   Client* client = new Client;
-  client->connection(socketDeskription);
+  client->connected(socketDeskription);
   connect(client, &Client::dicsonect, this, &Manager::dicsonectClient);
   m_clients.push_back(client);
 
-  qDebug() << "Connect client:" << client->name();
+  qDebug() <<QThread::currentThreadId() << "Connect client:" << client->name();
 }
 
 void Manager::dicsonectClient()
