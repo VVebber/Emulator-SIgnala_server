@@ -33,6 +33,7 @@ private:
 
 private:
     void sendToClient();
+    void setTypeSignal(QJsonObject message);
 };
 
 #endif

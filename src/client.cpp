@@ -1,10 +1,14 @@
 #include "client.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDataStream>
 #include <QTcpServer>
 #include <QThread>
 #include <QPoint>
 #include <cmath>
+
+#include <iostream>
 
 #include <netinet/tcp.h>
 #include <sys/socket.h>
@@ -16,7 +20,6 @@ Client::Client()
 {
   m_typeSignal = "sin";
   m_countPoint = -100;
-  m_idTimerEvent = startTimer(200);
 }
 
 void Client::connected(qintptr socketDeskription)
@@ -78,21 +81,27 @@ void Client::disconectClient()
 
 void Client::readToClient()
 {
-  QDataStream in(m_socket);
-  in.setVersion(QDataStream::Qt_5_15);
+  QJsonObject message;
+  QJsonDocument document;
+  document = QJsonDocument::fromJson(m_socket->readAll());
 
-  if(in.status() == QDataStream::Ok)
+  message = document.object();
+  if(message.contains("command"))
   {
-    QString str;
-    in >> str;
-    m_typeSignal = str;
-    m_countPoint = -100;
-
-    qDebug() <<"Receive request: "<< str;
-  }
-  else
-  {
-    qDebug() <<"Request Error.";
+    QString command = message["command"].toString();
+    if(command == "setting the type of signal")
+    {
+      setTypeSignal(message);
+    }
+    else if (command == "setting draw point")
+    {
+      isTimerEvent(message);
+    }
+    else
+    {
+      qDebug() <<"the request is not understood";
+      return;
+    }
   }
 }
 
@@ -127,6 +136,8 @@ void Client::close(bool isDeleteLater)
   }
 }
 
+
+
 void Client::timerEvent(QTimerEvent *event)
 {
   sendToClient();
@@ -135,11 +146,6 @@ void Client::timerEvent(QTimerEvent *event)
 void Client::sendToClient()
 {
   const float PI = 3.14;
-
-  if(m_countPoint >= 100)
-  {
-    m_countPoint = -100;
-  }
 
   QPoint Point(m_countPoint, 0);
   if(m_socket->isOpen())
@@ -174,12 +180,45 @@ void Client::sendToClient()
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_15);
     out << Point;
-//    if(m_socket->state())
+    //    if(m_socket->state())
     int errorWhite = m_socket->write(data);
     if(errorWhite == -1){
       qDebug()<<"errorWhite";
     }
     m_socket->flush();
     m_countPoint++;
+  }
+}
+
+void Client::isTimerEvent(QJsonObject message){
+  if(message.contains("drawPoint"))
+  {
+    if(m_idTimerEvent != 0)
+    {
+      killTimer((m_idTimerEvent));
+      m_idTimerEvent = 0;
+    }
+    else
+    {
+      m_idTimerEvent = startTimer(200);
+    }
+  }
+  else
+  {
+    qDebug() <<"isTimerEvent:  Something is going wrong(:";
+  }
+}
+
+void Client::setTypeSignal(QJsonObject message)
+{
+  if(message.contains("TypeSignal"))
+  {
+    m_typeSignal = message["TypeSignal"].toString();
+    qDebug() <<"Receive request: "<< m_typeSignal;
+    m_countPoint = -100;
+  }
+  else
+  {
+    qDebug() <<"setTypeSignal:  Something is going wrong(:";
   }
 }
