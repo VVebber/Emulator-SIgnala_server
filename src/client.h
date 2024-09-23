@@ -1,7 +1,12 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+
+#include <QThread>
+#include <QTcpServer>
 #include <QTcpSocket>
+#include <QVector>
+#include <cmath>
 
 class Client : public QObject {
   Q_OBJECT
@@ -10,28 +15,28 @@ public:
   Client();
   ~Client();
 
-  QString name() const; // TODO
+  QString name() const;
 
 signals:
   void dicsonect();
 
 public slots:
-  void connected(qintptr socketDeskription);
+  //void disabling();
+  void connection(qintptr socketDeskription);
   void timerEvent(QTimerEvent *event) override;
   void disconectClient();
   void readToClient();
+  void deleteClient();
 
-private:  
-  void close(bool isDeleteLater);
+private:
+  void close();
 
   QTcpSocket* m_socket;
   QString m_typeSignal;
 
   int m_idTimerEvent;
   int m_countPoint;
-  int m_countKeep;
-  int m_keepIntvl;
-  int m_time;
+
 private:
     void sendToClient();
 };

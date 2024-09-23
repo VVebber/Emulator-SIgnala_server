@@ -9,7 +9,7 @@ Client::Client()
     m_idTimerEvent = startTimer(200);
 }
 
-void Client::connection(qintptr socketDeskription)
+void Client::connected(qintptr socketDeskription)
 {
     m_socket = new QTcpSocket;
     m_socket->setSocketDescriptor(socketDeskription);
@@ -21,7 +21,7 @@ void Client::connection(qintptr socketDeskription)
 Client::~Client()
 {
     qDebug() << "destructor";
-    close();
+    close(false);
 }
 
 QString Client::name() const
@@ -37,7 +37,7 @@ QString Client::name() const
 void Client::disconectClient()
 {
     qDebug() << "disconectClient";
-    close();
+    close(true);
     emit dicsonect();
 }
 
@@ -61,7 +61,7 @@ void Client::readToClient()
     }
 }
 
-void Client::close()
+void Client::close(bool isDeleteLater)
 {
     if(m_idTimerEvent != 0)
     {
@@ -76,7 +76,14 @@ void Client::close()
         disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
         m_socket->close();
+        if(isDeleteLater)
+        {
         m_socket->deleteLater();
+        }
+        else
+        {
+          delete m_socket;
+        }
         m_socket = nullptr;
     }
     else
@@ -125,12 +132,12 @@ void Client::sendToClient()
             Point.setY(40 * std::asin(m_countPoint / 100.0));
         }
 
-        QByteArray Data;
-        Data.clear();
-        QDataStream out(&Data, QIODevice::WriteOnly);
+        QByteArray data;
+        data.clear();
+        QDataStream out(&data, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_5_15);
         out << Point;
-        m_socket->write(Data);
+        m_socket->write(data);
         m_socket->flush();
         m_countPoint++;
     }
