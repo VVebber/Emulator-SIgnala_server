@@ -4,6 +4,8 @@
 #include <QTcpSocket>
 
 class QThread;
+class Protocol;
+class Command;
 
 class Client : public QObject {
   Q_OBJECT
@@ -28,12 +30,15 @@ private:
   QTcpSocket* m_socket;
   QString m_typeSignal;
 
+  Protocol* m_messageProtocol;
+
   int m_idTimerEvent;
   int m_countPoint;
 
 private:
     void sendToClient();
-    void setTypeSignal(QJsonObject message);
+    void handlTypeSignal(Command command);
+    void handlDrawPoint(Command command);
 };
 
 #endif

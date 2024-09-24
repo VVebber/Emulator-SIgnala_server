@@ -1,7 +1,10 @@
+#include "protocoljson.h"
+#include "command.h"
 #include "client.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QDataStream>
 #include <QTcpServer>
 #include <QThread>
@@ -9,6 +12,7 @@
 #include <cmath>
 
 #include <iostream>
+
 
 #include <netinet/tcp.h>
 #include <sys/socket.h>
@@ -20,6 +24,10 @@ Client::Client()
 {
   m_typeSignal = "sin";
   m_countPoint = -100;
+  m_idTimerEvent = 0;
+
+  ProtocolJSON* protocol = new ProtocolJSON;
+  m_messageProtocol = protocol;
 }
 
 void Client::connected(qintptr socketDeskription)
@@ -81,29 +89,23 @@ void Client::disconectClient()
 
 void Client::readToClient()
 {
-  QJsonObject message;
-  QJsonDocument document;
-  document = QJsonDocument::fromJson(m_socket->readAll());
+  Command command = m_messageProtocol->decode(m_socket->readAll());
 
-  message = document.object();
-  if(message.contains("command"))
+  if(command.isCommand("setting the type of signal"))
   {
-    QString command = message["command"].toString();
-    if(command == "setting the type of signal")
-    {
-      setTypeSignal(message);
-    }
-    else if (command == "setting draw point")
-    {
-      isTimerEvent(message);
-    }
-    else
-    {
-      qDebug() <<"the request is not understood";
-      return;
-    }
+    handlTypeSignal(command);
+  }
+  else if (command.isCommand("setting draw point"))
+  {
+    handlDrawPoint(command);
+  }
+  else
+  {
+    qDebug() <<"the request is not understood";
+    return;
   }
 }
+
 
 void Client::close(bool isDeleteLater)
 {
@@ -146,79 +148,74 @@ void Client::timerEvent(QTimerEvent *event)
 void Client::sendToClient()
 {
   const float PI = 3.14;
-
-  QPoint Point(m_countPoint, 0);
-  if(m_socket->isOpen())
+  QJsonArray points;
+  if(m_countPoint == 100)
   {
-    if (m_typeSignal == "sin")
-    {
-      Point.setY(50 * std::sin(m_countPoint * PI / 50));
-    }
-    else if (m_typeSignal == "cos")
-    {
-      Point.setY(50 * std::cos(m_countPoint * PI / 50));
-    }
-    else if (m_typeSignal == "tan")
-    {
-      Point.setY(50 * std::tan(m_countPoint * PI / 50));
-    }
-    else if (m_typeSignal == "atan")
-    {
-      Point.setY(50 * std::atan(m_countPoint * PI / 50));
-    }
-    else if (m_typeSignal == "acos")
-    {
-      Point.setY(30 * std::acos(m_countPoint / 150.0));
-    }
-    else if (m_typeSignal == "asin")
-    {
-      Point.setY(40 * std::asin(m_countPoint / 100.0));
-    }
-
-    QByteArray data;
-    data.clear();
-    QDataStream out(&data, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_15);
-    out << Point;
-    //    if(m_socket->state())
-    int errorWhite = m_socket->write(data);
-    if(errorWhite == -1){
-      qDebug()<<"errorWhite";
-    }
-    m_socket->flush();
-    m_countPoint++;
-  }
-}
-
-void Client::isTimerEvent(QJsonObject message){
-  if(message.contains("drawPoint"))
-  {
-    if(m_idTimerEvent != 0)
-    {
-      killTimer((m_idTimerEvent));
-      m_idTimerEvent = 0;
-    }
-    else
-    {
-      m_idTimerEvent = startTimer(200);
-    }
-  }
-  else
-  {
-    qDebug() <<"isTimerEvent:  Something is going wrong(:";
-  }
-}
-
-void Client::setTypeSignal(QJsonObject message)
-{
-  if(message.contains("TypeSignal"))
-  {
-    m_typeSignal = message["TypeSignal"].toString();
-    qDebug() <<"Receive request: "<< m_typeSignal;
     m_countPoint = -100;
   }
+
+  for(int i = 0; i < 10; i++)
+  {
+    QPoint Point(m_countPoint, 0);
+    if(m_socket->isOpen())
+    {
+      if (m_typeSignal == "sin")
+      {
+        Point.setY(50 * std::sin(m_countPoint * PI / 50));
+      }
+      else if (m_typeSignal == "cos")
+      {
+        Point.setY(50 * std::cos(m_countPoint * PI / 50));
+      }
+      else if (m_typeSignal == "tan")
+      {
+        Point.setY(50 * std::tan(m_countPoint * PI / 50));
+      }
+      else if (m_typeSignal == "atan")
+      {
+        Point.setY(50 * std::atan(m_countPoint * PI / 50));
+      }
+      else if (m_typeSignal == "acos")
+      {
+        Point.setY(30 * std::acos(m_countPoint / 150.0));
+      }
+      else if (m_typeSignal == "asin")
+      {
+        Point.setY(40 * std::asin(m_countPoint / 100.0));
+      }
+      m_countPoint++;
+
+      points.append(Point.x());
+      points.append(Point.y());
+    }
+  }
+  if(points.size() != 0)
+  {
+    QJsonObject message;
+    message["command"] = "point for graphing function";
+    message["Point"] = points;
+    QJsonDocument document(message);
+    m_socket->write(document.toJson());
+  }
+}
+
+void Client::handlDrawPoint(Command command){
+  if(m_idTimerEvent != 0)
+  {
+    killTimer((m_idTimerEvent));
+    m_idTimerEvent = 0;
+    qDebug() <<"handlDrawPoint:  DeleteTimerEvent";
+  }
   else
   {
-    qDebug() <<"setTypeSignal:  Something is going wrong(:";
+    m_idTimerEvent = startTimer(400);
+    qDebug() <<"handlDrawPoint:  CreateTimerEvent";
   }
+}
+
+void Client::handlTypeSignal(Command command)
+{
+  m_typeSignal = command.getVariableData();
+  qDebug() <<"Receive request: "<< m_typeSignal;
+  m_countPoint = -100;
 }

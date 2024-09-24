@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Network)
+find_package(Qt5 REQUIRED COMPONENTS Core Network Xml)
 
 set(PROJECT_SOURCES
     src/main.cpp
@@ -23,6 +23,10 @@ set(PROJECT_SOURCES
 
 add_executable(Server
     ${PROJECT_SOURCES}
+    src/protocol.h src/protocol.cpp
+    src/protocoljson.h src/protocoljson.cpp
+    src/protocolxml.h src/protocolxml.cpp
+    src/command.h src/command.cpp
     )
 
-target_link_libraries(Server PRIVATE Qt5::Core Qt5::Network)
+target_link_libraries(Server PRIVATE Qt5::Core Qt5::Network Qt5::Xml)
