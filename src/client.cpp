@@ -1,4 +1,5 @@
 #include "protocoljson.h"
+#include "protocolxml.h"
 #include "command.h"
 #include "client.h"
 
@@ -9,6 +10,7 @@
 #include <QTcpServer>
 #include <QThread>
 #include <QPoint>
+#include <QList>
 #include <cmath>
 
 #include <iostream>
@@ -26,8 +28,7 @@ Client::Client()
   m_countPoint = -100;
   m_idTimerEvent = 0;
 
-  ProtocolJSON* protocol = new ProtocolJSON;
-  m_messageProtocol = protocol;
+  m_messageProtocol = new ProtocolJSON;
 }
 
 void Client::connected(qintptr socketDeskription)
@@ -46,10 +47,10 @@ void Client::connected(qintptr socketDeskription)
   }
 
   int keepIdle = 10;
-  if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(keepIdle)) == -1)
-  {
-    qWarning() << "2Failed to set TCP_KEEPIDLE."<<strerror(errno);
-  }
+  // if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(keepIdle)) == -1)
+  // {
+  //   qWarning() << "2Failed to set TCP_KEEPIDLE."<<strerror(errno);
+  // }
 
   int keepInterval = 5;
   if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(keepInterval)) == -1)
@@ -148,7 +149,7 @@ void Client::timerEvent(QTimerEvent *event)
 void Client::sendToClient()
 {
   const float PI = 3.14;
-  QJsonArray points;
+  QList<int> points;
   if(m_countPoint == 100)
   {
     m_countPoint = -100;
@@ -185,17 +186,13 @@ void Client::sendToClient()
       }
       m_countPoint++;
 
-      points.append(Point.x());
-      points.append(Point.y());
+      points.push_back(Point.x());
+      points.push_back(Point.y());
     }
   }
   if(points.size() != 0)
   {
-    QJsonObject message;
-    message["command"] = "point for graphing function";
-    message["Point"] = points;
-    QJsonDocument document(message);
-    m_socket->write(document.toJson());
+    m_socket->write(m_messageProtocol->encode("point for graphing function", QVariant::fromValue(points)));
   }
 }
 

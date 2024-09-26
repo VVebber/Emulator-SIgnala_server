@@ -8,10 +8,8 @@ class ProtocolXML: public Protocol
 public:
   ProtocolXML();
 
-  // QDomDocument encode(QDomDocument data) override;
-  // QDomDocument decode(QDomDocument code) override;
-
-  //void write(QDomDocument code) override;
+  QByteArray encode(QString command, QVariant data) override;
+  Command decode(QByteArray messageCode) override;
 };
 
 #endif // PROTOCOLXML_H

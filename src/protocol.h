@@ -6,6 +6,7 @@
 
 class QJsonObject;
 class QTcpSocket;
+class QByteArray;
 class Command;
 
 class Protocol : public QJsonDocument, public QDomDocument
@@ -13,7 +14,8 @@ class Protocol : public QJsonDocument, public QDomDocument
 public:
   Protocol() = default;
 
-  virtual QByteArray encode(QJsonObject message) = 0;
+//  template <class T1>
+  virtual QByteArray encode(QString command, QVariant data) = 0;
   //virtual QByteArray encode(QDomDocument message) = 0;
 
   virtual Command decode(QByteArray messageCode) = 0;
