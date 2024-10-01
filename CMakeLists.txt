@@ -12,17 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 REQUIRED COMPONENTS  Network )
 
 add_subdirectory(lib/ProtocolLib)
-add_definitions(-p -P)
-add_compile_options(-1024 -JSON)
 
-set(PROJECT_SOURCES
-    src/main.cpp
-    src/server.h  src/server.cpp
-    src/client.h  src/client.cpp
-    src/manager.h src/manager.cpp
-    )
-
-add_executable(server ${PROJECT_SOURCES})
+add_executable(server
+  src/main.cpp
+  src/server.h  src/server.cpp
+  src/client.h  src/client.cpp
+  src/manager.h src/manager.cpp
+)
 
 target_link_libraries(server PRIVATE Qt5::Network
 protocol)
