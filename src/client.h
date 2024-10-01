@@ -11,7 +11,7 @@ class Client : public QObject {
   Q_OBJECT
 
 public:
-  Client();
+  Client(QString typeProtocole);
   ~Client();
   QString name() const;
 

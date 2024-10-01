@@ -18,6 +18,7 @@ public:
   Manager(const Manager&) = delete;
   ~Manager();
   void operator=(const Manager&) = delete;
+  void setProtocol(QString);
 
 
 public slots:
@@ -33,6 +34,7 @@ private:
   QList<Client*> m_clients;
   QThread m_thread;
   QMutex m_mutex;
+  QString m_typeProtocol;
 
 private:
   Manager();

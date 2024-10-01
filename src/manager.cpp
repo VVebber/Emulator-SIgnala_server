@@ -50,7 +50,7 @@ void Manager::closeManager()
 
 void Manager::connectClient(qintptr socketDeskription)
 {
-  Client* client = new Client;
+  Client* client = new Client(m_typeProtocol);
   client->connected(socketDeskription);
   connect(client, &Client::dicsonect, this, &Manager::dicsonectClient);
   m_clients.push_back(client);
@@ -72,4 +72,9 @@ void Manager::dicsonectClient()
     qWarning() << "Unknown client" << client->name() <<"\n";
   }
   delete client;
+}
+
+void Manager::setProtocol(QString newType)
+{
+  m_typeProtocol = newType;
 }

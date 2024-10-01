@@ -9,24 +9,20 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Network Xml)
+find_package(Qt5 REQUIRED COMPONENTS  Network )
+
+add_subdirectory(lib/ProtocolLib)
+add_definitions(-p -P)
+add_compile_options(-1024 -JSON)
 
 set(PROJECT_SOURCES
     src/main.cpp
-    src/server.h
-    src/server.cpp
-    src/client.cpp
-    src/client.h
-    src/manager.h
-    src/manager.cpp
+    src/server.h  src/server.cpp
+    src/client.h  src/client.cpp
+    src/manager.h src/manager.cpp
     )
 
-add_executable(Server
-    ${PROJECT_SOURCES}
-    src/protocol.h src/protocol.cpp
-    src/protocoljson.h src/protocoljson.cpp
-    src/protocolxml.h src/protocolxml.cpp
-    src/command.h src/command.cpp
-    )
+add_executable(server ${PROJECT_SOURCES})
 
-target_link_libraries(Server PRIVATE Qt5::Core Qt5::Network Qt5::Xml)
+target_link_libraries(server PRIVATE Qt5::Network
+protocol)

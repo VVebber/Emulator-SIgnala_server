@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType<qintptr>("qintptr");
   Manager &instance = Manager::getInstance();
 
-  if (argc != 3)
+  if (argc != 5)
   {
     return 1;
   }
@@ -48,6 +48,24 @@ int main(int argc, char *argv[])
     }
 
     port = argPort;
+  }
+
+
+  int protocol = args.indexOf("-P");
+  if(protocol < 0 || protocol == 4)
+  {
+    return 2;
+  }
+  else
+  {
+    QString protocolStr = args[protocol + 1];
+    if(protocolStr == "JSON" || protocolStr == "XML"){
+      instance.setProtocol(protocolStr);
+    }
+    else
+    {
+      return 4;
+    }
   }
 
 #ifdef Q_OS_LINUX

@@ -1,6 +1,6 @@
-#include "protocoljson.h"
-#include "protocolxml.h"
-#include "command.h"
+#include <protocoljson.h>
+#include <protocolxml.h>
+#include <command.h>
 #include "client.h"
 
 #include <QJsonDocument>
@@ -22,13 +22,20 @@
 #include <netinet/ip.h>
 #include <errno.h>
 
-Client::Client()
+Client::Client(QString typeProtocole)
 {
   m_typeSignal = "sin";
   m_countPoint = -100;
   m_idTimerEvent = 0;
 
+  if(typeProtocole == "JSON")
+  {
   m_messageProtocol = new ProtocolJSON;
+  }
+  else
+  {
+    m_messageProtocol = new ProtocolXML;
+  }
 }
 
 void Client::connected(qintptr socketDeskription)
@@ -47,10 +54,10 @@ void Client::connected(qintptr socketDeskription)
   }
 
   int keepIdle = 10;
-  // if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(keepIdle)) == -1)
-  // {
-  //   qWarning() << "2Failed to set TCP_KEEPIDLE."<<strerror(errno);
-  // }
+  if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(keepIdle)) == -1)
+  {
+    qWarning() << "2Failed to set TCP_KEEPIDLE."<<strerror(errno);
+  }
 
   int keepInterval = 5;
   if (setsockopt(intSocketDescriptor, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(keepInterval)) == -1)
