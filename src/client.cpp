@@ -13,7 +13,6 @@
 #include <QList>
 #include <cmath>
 
-#include <iostream>
 
 
 #include <netinet/tcp.h>
@@ -22,17 +21,17 @@
 #include <netinet/ip.h>
 #include <errno.h>
 
-Client::Client(QString typeProtocole)
+Client::Client(QString typeProtocol)
 {
   m_typeSignal = "sin";
   m_countPoint = -100;
   m_idTimerEvent = 0;
 
-  if(typeProtocole == "JSON")
+  if(typeProtocol == "JSON")
   {
-  m_messageProtocol = new ProtocolJSON;
+    m_messageProtocol = new ProtocolJSON;
   }
-  else
+  else if(typeProtocol == "XML")
   {
     m_messageProtocol = new ProtocolXML;
   }
@@ -42,7 +41,7 @@ void Client::connected(qintptr socketDeskription)
 {
   m_socket = new QTcpSocket;
   m_socket->setSocketDescriptor(socketDeskription);
-  connect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
+  connect(m_socket, &QTcpSocket::readyRead, this, &Client::readFromClient);
   connect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
   int intSocketDescriptor = m_socket->socketDescriptor();
@@ -95,22 +94,20 @@ void Client::disconectClient()
   emit dicsonect();
 }
 
-void Client::readToClient()
+void Client::readFromClient()
 {
   Command command = m_messageProtocol->decode(m_socket->readAll());
 
-  if(command.isCommand("setting the type of signal"))
-  {
-    handlTypeSignal(command);
-  }
-  else if (command.isCommand("setting draw point"))
-  {
-    handlDrawPoint(command);
-  }
-  else
-  {
+  switch (command.getCommandType()) {
+  case Command::CommandType::TypeSignalSetting:
+    handlerTypeSignal(command);
+    break;
+  case Command::CommandType::DrawStartOrFin:
+    handlerDrawPoint(command);
+    break;
+  default:
     qDebug() <<"the request is not understood";
-    return;
+    break;
   }
 }
 
@@ -126,7 +123,7 @@ void Client::close(bool isDeleteLater)
   if(m_socket)
   {
     qDebug() <<this<< "close socket";
-    disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readToClient);
+    disconnect(m_socket, &QTcpSocket::readyRead, this, &Client::readFromClient);
     disconnect(m_socket, &QTcpSocket::disconnected, this, &Client::disconectClient);
 
     m_socket->close();
@@ -199,11 +196,16 @@ void Client::sendToClient()
   }
   if(points.size() != 0)
   {
-    m_socket->write(m_messageProtocol->encode("point for graphing function", QVariant::fromValue(points)));
+    QByteArray a = m_messageProtocol->encode(Command::CommandType::PointGraphing, QVariant::fromValue(points));
+    QByteArray b = m_messageProtocol->encode(Command::CommandType::PointGraphing, "");
+
+    m_socket->write(a);
+    m_socket->write(a);
+    // m_socket->write(b);
   }
 }
 
-void Client::handlDrawPoint(Command command){
+void Client::handlerDrawPoint(Command command){
   if(m_idTimerEvent != 0)
   {
     killTimer((m_idTimerEvent));
@@ -217,7 +219,7 @@ void Client::handlDrawPoint(Command command){
   }
 }
 
-void Client::handlTypeSignal(Command command)
+void Client::handlerTypeSignal(Command command)
 {
   m_typeSignal = command.getVariableData();
   qDebug() <<"Receive request: "<< m_typeSignal;

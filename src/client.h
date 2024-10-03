@@ -11,7 +11,7 @@ class Client : public QObject {
   Q_OBJECT
 
 public:
-  Client(QString typeProtocole);
+  Client(QString typeProtocol);
   ~Client();
   QString name() const;
 
@@ -22,7 +22,7 @@ public slots:
   void connected(qintptr socketDeskription);
   void timerEvent(QTimerEvent *event) override;
   void disconectClient();
-  void readToClient();
+  void readFromClient();
 
 private:
   void close(bool isDeleteLater);
@@ -37,8 +37,8 @@ private:
 
 private:
     void sendToClient();
-    void handlTypeSignal(Command command);
-    void handlDrawPoint(Command command);
+    void handlerTypeSignal(Command command);
+    void handlerDrawPoint(Command command);
 };
 
 #endif
