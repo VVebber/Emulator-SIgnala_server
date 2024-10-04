@@ -96,18 +96,23 @@ void Client::disconectClient()
 
 void Client::readFromClient()
 {
-  Command command = m_messageProtocol->decode(m_socket->readAll());
-
-  switch (command.getCommandType()) {
-  case Command::CommandType::TypeSignalSetting:
-    handlerTypeSignal(command);
-    break;
-  case Command::CommandType::DrawStartOrFin:
-    handlerDrawPoint(command);
-    break;
-  default:
-    qDebug() <<"the request is not understood";
-    break;
+  m_messageProtocol->addData(m_socket->readAll());
+  Command command = m_messageProtocol->decode(m_messageProtocol->getNextCommand());
+  while(command.isValid())
+  {
+    switch (command.getCommandType())
+    {
+    case Command::CommandType::TypeSignalSetting:
+      handlerTypeSignal(command);
+      break;
+    case Command::CommandType::DrawStartOrFin:
+      handlerDrawPoint(command);
+      break;
+    default:
+      qDebug() <<"the request is not understood";
+      break;
+    }
+    command = m_messageProtocol->decode(m_messageProtocol->getNextCommand());
   }
 }
 
