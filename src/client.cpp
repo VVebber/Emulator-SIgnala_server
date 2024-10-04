@@ -29,11 +29,11 @@ Client::Client(QString typeProtocol)
 
   if(typeProtocol == "JSON")
   {
-    m_messageProtocol = new ProtocolJSON;
+    m_protocol = new ProtocolJSON;
   }
   else if(typeProtocol == "XML")
   {
-    m_messageProtocol = new ProtocolXML;
+    m_protocol = new ProtocolXML;
   }
 }
 
@@ -96,8 +96,8 @@ void Client::disconectClient()
 
 void Client::readFromClient()
 {
-  m_messageProtocol->addData(m_socket->readAll());
-  Command command = m_messageProtocol->decode(m_messageProtocol->getNextCommand());
+  m_protocol->addData(m_socket->readAll());
+  Command command = m_protocol->getNextCommand();
   while(command.isValid())
   {
     switch (command.getCommandType())
@@ -112,7 +112,7 @@ void Client::readFromClient()
       qDebug() <<"the request is not understood";
       break;
     }
-    command = m_messageProtocol->decode(m_messageProtocol->getNextCommand());
+    command = m_protocol->getNextCommand();
   }
 }
 
@@ -201,12 +201,10 @@ void Client::sendToClient()
   }
   if(points.size() != 0)
   {
-    QByteArray a = m_messageProtocol->encode(Command::CommandType::PointGraphing, QVariant::fromValue(points));
-    QByteArray b = m_messageProtocol->encode(Command::CommandType::PointGraphing, "");
+    QByteArray a = m_protocol->encode(Command::CommandType::PointGraphing, QVariant::fromValue(points));
 
     m_socket->write(a);
     m_socket->write(a);
-    // m_socket->write(b);
   }
 }
 

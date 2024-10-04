@@ -30,7 +30,7 @@ private:
   QTcpSocket* m_socket;
   QString m_typeSignal;
 
-  Protocol* m_messageProtocol;
+  Protocol* m_protocol;
 
   int m_idTimerEvent;
   int m_countPoint;
